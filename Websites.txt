@@ -1,0 +1,4 @@
+http://www.vogella.com/articles/Python/article.html
+http://www.vogella.com/articles/GoogleAppEngine/article.html
+http://www.caktusgroup.com/blog/2011/08/31/getting-started-using-python-eclipse/
+http://net.tutsplus.com/tutorials/python-tutorials/python-from-scratch-creating-a-dynamic-website/
