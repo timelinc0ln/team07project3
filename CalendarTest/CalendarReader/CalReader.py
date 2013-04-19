@@ -16,8 +16,8 @@ client2.ClientLogin('project3team07@gmail.com', 'teamseven', None, None, None, N
 
 
 
-calendar_feed = client2.GetOwnCalendarsFeed()
-
+calendar_feed = client2.GetAllCalendarsFeed()
+calendar_feed
 
 
 for document_entry in documents_feed.entry:
