@@ -17,7 +17,16 @@ client2.ClientLogin('project3team07@gmail.com', 'teamseven', "HOSTED_OR_GOOGLE",
 
 print(client2.account_type)
 
-calendar_feed = client2.GetOwnCalendarsFeed()
+calendar_feed = client2.GetCalendarListFeed()
+
+for calendar_list_entry in calendar_feed.entry:
+    
+    if calendar_list_entry.title.text == "Test Calendar":
+       # print(calendar_list_entry.title.text)
+        calendar_event_feed = client2.GetCalendarEventFeed(calendar_list_entry.GetCalendarListEntryUri())
+        for calendar_event_list_entry in calendar_event_feed.entry:
+            print(calendar_event_list_entry.title.text)
+        print("I found it")
 
 #comments and stuff
 #comments
