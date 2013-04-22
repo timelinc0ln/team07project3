@@ -33,15 +33,15 @@ for calendar_list_entry in calendar_feed.entry:
 #comments and stuff
 #comments
 #comments
-<<<<<<< HEAD
+#<<<<<<< HEAD
 
 calendar_feed = client2.GetAllCalendarsFeed()
 #print(calendar_feed)
 #calendar_feed = 
-client2.CalendarClient.InsertEvent()
+#client2.CalendarClient.InsertEvent()
 
 
-=======
+#=======
 class Example(Frame):
     def __init__(self, parent):
         Frame.__init__(self, parent)
@@ -60,7 +60,7 @@ class Example(Frame):
         m = Message(self, textvariable = v)
         m.place(x = 25, y = 25)
         
-        myEntry = Entry(self, textvariable = v, command=self.update())
+        myEntry = Entry(self, textvariable = v)
         myEntry.place (x = 150, y = 50)
         
         p = None
@@ -73,7 +73,7 @@ class Example(Frame):
         printButton.place(x = 400, y = 50)
         
         
->>>>>>> Windows and stuff
+#>>>>>>> Windows and stuff
 
 for document_entry in documents_feed.entry:
     print(document_entry.title.text)
@@ -89,4 +89,5 @@ def main():
 
     
 if __name__ == '__main__':
+    
     main()
