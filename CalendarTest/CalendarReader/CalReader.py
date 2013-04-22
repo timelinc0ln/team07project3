@@ -31,9 +31,7 @@ for calendar_list_entry in calendar_feed.entry:
        print("I found it")
 
 #comments and stuff
-#comments
-#comments
-#<<<<<<< HEAD
+
 
 calendar_feed = client2.GetAllCalendarsFeed()
 #print(calendar_feed)
@@ -41,7 +39,7 @@ calendar_feed = client2.GetAllCalendarsFeed()
 #client2.CalendarClient.InsertEvent()
 
 
-#=======
+
 class Example(Frame):
     def __init__(self, parent):
         Frame.__init__(self, parent)
@@ -73,7 +71,6 @@ class Example(Frame):
         printButton.place(x = 400, y = 50)
         
         
-#>>>>>>> Windows and stuff
 
 for document_entry in documents_feed.entry:
     print(document_entry.title.text)
