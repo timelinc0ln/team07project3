@@ -19,6 +19,7 @@ print(client2.account_type)
 
 calendar_feed = client2.GetCalendarListFeed()
 
+<<<<<<< HEAD
 for calendar_list_entry in calendar_feed.entry:
     
     if calendar_list_entry.title.text == "Test Calendar":
@@ -31,6 +32,12 @@ for calendar_list_entry in calendar_feed.entry:
 #comments and stuff
 #comments
 #comments
+=======
+calendar_feed = client2.GetAllCalendarsFeed()
+#print(calendar_feed)
+#calendar_feed = 
+client2.CalendarClient.InsertEvent()
+>>>>>>> CalendarReader
 
 
 for document_entry in documents_feed.entry:
