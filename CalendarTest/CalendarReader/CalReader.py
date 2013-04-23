@@ -97,7 +97,7 @@ class LoginWindow(Frame):
             elif callerName == "Quit":
                 print("Exiting")
                 self.quit()
-        #Entries
+        #Entries - does nothing, but shows how to use elif
         if callerType == "Entry":
             if callerName == "UserName":
                 self.userName = self.userNameEntry.textvariable.get()
