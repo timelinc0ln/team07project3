@@ -68,7 +68,7 @@ class LoginWindow(Frame):
         self.userNamePrompt = Label(self, text="User Name:")
         self.userPassPrompt = Label(self, text="Password:")
         self.userNameEntry = Entry(self, textvariable=self.userName)
-        self.userPassEntry = Entry(self, textvariable=self.userPass)
+        self.userPassEntry = Entry(self, textvariable=self.userPass, show="*")
         
         #set up window theme
         self.parent.title("Login to GroupMeet")
