@@ -6,9 +6,7 @@ Created on Apr 18, 2013
 import gdata.docs.service
 import gdata.calendar.service
 from Tkinter import *
-#Tk, BOTH, Entry, Message, Label
 from ttk import *
-#Frame, Button, Style
 
 
 client = gdata.docs.service.DocsService()
