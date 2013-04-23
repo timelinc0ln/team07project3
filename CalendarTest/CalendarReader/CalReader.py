@@ -70,7 +70,7 @@ class LoginWindow(Frame):
         self.userNamePrompt = Label(self, text="User Name:")
         self.userPassPrompt = Label(self, text="Password:")
         self.userNameEntry = Entry(self, textvariable=self.userName)
-        self.userPassEntry = Entry(self)
+        self.userPassEntry = Entry(self, textvariable=self.userPass)
         
         #set up window theme
         self.parent.title("Login to GroupMeet")
@@ -94,6 +94,7 @@ class LoginWindow(Frame):
             if callerName == "Submit":
                 print("Submit button pressed")
                 print(self.userName.get())
+                print(self.userPass.get())
                 self.haveSubmitted = True
             elif callerName == "Quit":
                 print("Exiting")
