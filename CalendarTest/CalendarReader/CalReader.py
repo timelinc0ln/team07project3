@@ -43,10 +43,6 @@ calendar_feed = client2.GetAllCalendarsFeed()
 
 #=======
 #=======
-
-#notes
-#From here, what do we want to do?
-#we need to 
 class LoginWindow(Frame):
     quitButton = None
     submitButton = None
@@ -72,7 +68,7 @@ class LoginWindow(Frame):
         self.userNamePrompt = Label(self, text="User Name:")
         self.userPassPrompt = Label(self, text="Password:")
         self.userNameEntry = Entry(self, textvariable=self.userName)
-        self.userPassEntry = Entry(self, textvariable=self.userPass, show="*")
+        self.userPassEntry = Entry(self, textvariable=self.userPass)
         
         #set up window theme
         self.parent.title("Login to GroupMeet")
