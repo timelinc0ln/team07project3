@@ -5,8 +5,10 @@ Created on Apr 18, 2013
 '''
 import gdata.docs.service
 import gdata.calendar.service
-from Tkinter import Tk, BOTH, Entry, Message
-from ttk import Frame, Button, Style
+from Tkinter import *
+#Tk, BOTH, Entry, Message, Label
+from ttk import *
+#Frame, Button, Style
 
 
 client = gdata.docs.service.DocsService()
@@ -39,7 +41,72 @@ calendar_feed = client2.GetAllCalendarsFeed()
 #client2.CalendarClient.InsertEvent()
 
 
+#<<<<<<< HEAD
 
+#=======
+#=======
+class LoginWindow(Frame):
+    quitButton = None
+    submitButton = None
+    testMessage = None
+    userNameEntry = None
+    userPassEntry = None
+    userName = None
+    userPass = None
+    haveSubmitted = None
+    
+    def __init__(self, parent):
+        Frame.__init__(self, parent)
+        self.parent = parent
+        self.initUI()
+    
+    def initUI(self):
+        #define widgets for window
+        quitButton = Button(self, text="Cancel", command=lambda: self.callBack("Button", "Quit"))
+        submitButton = Button(self, text="Submit", command=lambda: self.callBack("Button", "Submit"))
+        #testMessage = Message(self)
+        self.userName = StringVar()
+        self.userPass = StringVar()
+        self.userNamePrompt = Label(self, text="User Name:")
+        self.userPassPrompt = Label(self, text="Password:")
+        self.userNameEntry = Entry(self, textvariable=self.userName)
+        self.userPassEntry = Entry(self)
+        
+        #set up window theme
+        self.parent.title("Login to GroupMeet")
+        self.style = Style()
+        self.style.theme_use("default")
+        self.pack(fill=BOTH, expand = 1)
+        
+        #place widgets
+        self.userNamePrompt.place(x=0, y=25)
+        self.userNameEntry.place(x=80, y=25)
+        self.userPassPrompt.place(x=260, y=25)
+        self.userPassEntry.place(x=335, y=25)
+        submitButton.place(x=80, y=80)
+        quitButton.place(x=180, y=80)
+    
+    def callBack(self, callerType, callerName):
+        #handle each widget's callback
+        
+        #Buttons
+        if callerType == "Button":
+            if callerName == "Submit":
+                print("Submit button pressed")
+                print(self.userName.get())
+                self.haveSubmitted = True
+            elif callerName == "Quit":
+                print("Exiting")
+                self.quit()
+        #Entries
+        if callerType == "Entry":
+            if callerName == "UserName":
+                self.userName = self.userNameEntry.textvariable.get()
+                
+    
+    
+                
+#>>>>>>> Reading in a user name
 class Example(Frame):
     def __init__(self, parent):
         Frame.__init__(self, parent)
@@ -63,10 +130,6 @@ class Example(Frame):
         
         p = None
         
-        
-        
-       
-        
         printButton = Button(self,text="Print")
         printButton.place(x = 400, y = 50)
         
@@ -81,10 +144,9 @@ def main():
     
     root = Tk()
     root.geometry("600x200+300+300")
-    app = Example(root)
+    #app = Example(root)
+    app = LoginWindow(root)
     root.mainloop()
-
     
 if __name__ == '__main__':
-    
     main()
