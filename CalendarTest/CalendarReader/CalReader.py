@@ -44,7 +44,7 @@ class LoginWindow(Frame):
     userPassEntry = None
     userName = None
     userPass = None
-    haveSubmitted = None
+    haveLogged = False
     
     def __init__(self, parent):
         Frame.__init__(self, parent)
@@ -85,6 +85,7 @@ class LoginWindow(Frame):
             if callerName == "Submit":
                 print("Submit button pressed")
                 self.Login()
+                self.messageWindow()
             elif callerName == "Quit":
                 print("Exiting")
                 self.quit()
@@ -95,14 +96,24 @@ class LoginWindow(Frame):
      
                 
     def Login(self):
-        calendar_service = gdata.calendar.service.CalendarService()
-        calendar_service.email = self.userName.get()
-        calendar_service.password = self.userPass.get()
-        calendar_service.source = 'CalReader' # not really sure what this is
-        calendar_service.ProgrammaticLogin()     
+        calendarService = gdata.calendar.service.CalendarService()
+        calendarService.email = self.userName.get()
+        calendarService.password = self.userPass.get()
+        calendarService.source = 'CalReader' # not really sure what this is
+        calendarService.ProgrammaticLogin()     
         print(self.userName.get())
         print(self.userPass.get())
-        self.haveSubmitted = True
+        self.haveLogged = True
+        
+    def messageWindow(self):
+        if self.haveLogged == True:
+            calendarFrame = Toplevel()
+            message = "The calendar will go here"
+            Label(calendarFrame, text = message).pack()
+            calendarFrame.geometry("700x700+100+100")
+            quitButton = Button(calendarFrame, text="OK", command=lambda: self.callBack("Button", "Quit"))
+            #quitButton = Button(calendarFrame, text = 'OK', command = calendarFrame.destroy).pack()  
+            quitButton.place(x=200, y=200)  
                 
 #>>>>>>> Reading in a user name
 class Example(Frame):
@@ -117,7 +128,7 @@ class Example(Frame):
         self.pack(fill=BOTH, expand = 1)
         
         quitButton = Button(self,text="Quit", command=self.quit)
-        quitButton.place(x=50, y=50)
+        quitButton.place(x=350, y=675)
         v = None
         
         m = Message(self, textvariable = v)
