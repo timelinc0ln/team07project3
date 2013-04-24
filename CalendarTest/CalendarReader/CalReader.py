@@ -15,7 +15,7 @@ client.ClientLogin('project3team07@gmail.com', 'teamseven')
 documents_feed = client.GetDocumentListFeed()
 
 client2 = gdata.calendar.service.CalendarService()
-#client2.ClientLogin(username, password, account_type, service, auth_service_url, source, captcha_token, captcha_response)
+# client2.ClientLogin(username, password, account_type, service, auth_service_url, source, captcha_token, captcha_response)
 client2.ClientLogin('project3team07@gmail.com', 'teamseven', "HOSTED_OR_GOOGLE", "cl", None, None, None, None)
 
 print(client2.account_type)
@@ -34,15 +34,8 @@ for calendar_list_entry in calendar_feed.entry:
 
 
 calendar_feed = client2.GetAllCalendarsFeed()
-#print(calendar_feed)
-#calendar_feed = 
-#client2.CalendarClient.InsertEvent()
 
 
-#<<<<<<< HEAD
-
-#=======
-#=======
 class LoginWindow(Frame):
     quitButton = None
     submitButton = None
