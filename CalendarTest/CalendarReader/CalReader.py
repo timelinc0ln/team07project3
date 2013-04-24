@@ -9,31 +9,31 @@ from Tkinter import *
 from ttk import *
 
 
-client = gdata.docs.service.DocsService()
-client.ClientLogin('project3team07@gmail.com', 'teamseven')
-
-documents_feed = client.GetDocumentListFeed()
-
-client2 = gdata.calendar.service.CalendarService()
-# client2.ClientLogin(username, password, account_type, service, auth_service_url, source, captcha_token, captcha_response)
-client2.ClientLogin('project3team07@gmail.com', 'teamseven', "HOSTED_OR_GOOGLE", "cl", None, None, None, None)
-
-print(client2.account_type)
-
-calendar_feed = client2.GetCalendarListFeed()
-for calendar_list_entry in calendar_feed.entry:
-    
-    if calendar_list_entry.title.text == "Test Calendar":
-       print(calendar_list_entry.title.text)
-       #calendar_event_feed = calendar_list_entry.GetCalendarEventFeed()
-        #for calendar_event_list_entry in calendar_event_feed.entry:
-            #print(calendar_event_list_entry.title.text)
-       print("I found it")
-
-#comments and stuff
-
-
-calendar_feed = client2.GetAllCalendarsFeed()
+# client = gdata.docs.service.DocsService()
+# client.ClientLogin('project3team07@gmail.com', 'teamseven')
+# 
+# documents_feed = client.GetDocumentListFeed()
+# 
+# client2 = gdata.calendar.service.CalendarService()
+# # client2.ClientLogin(username, password, account_type, service, auth_service_url, source, captcha_token, captcha_response)
+# client2.ClientLogin('project3team07@gmail.com', 'teamseven', "HOSTED_OR_GOOGLE", "cl", None, None, None, None)
+# 
+# print(client2.account_type)
+# 
+# calendar_feed = client2.GetCalendarListFeed()
+# for calendar_list_entry in calendar_feed.entry:
+#     
+#     if calendar_list_entry.title.text == "Test Calendar":
+#        print(calendar_list_entry.title.text)
+#        #calendar_event_feed = calendar_list_entry.GetCalendarEventFeed()
+#         #for calendar_event_list_entry in calendar_event_feed.entry:
+#             #print(calendar_event_list_entry.title.text)
+#        print("I found it")
+# 
+# 
+# 
+# 
+# calendar_feed = client2.GetAllCalendarsFeed()
 
 
 class LoginWindow(Frame):
@@ -84,9 +84,7 @@ class LoginWindow(Frame):
         if callerType == "Button":
             if callerName == "Submit":
                 print("Submit button pressed")
-                print(self.userName.get())
-                print(self.userPass.get())
-                self.haveSubmitted = True
+                self.Login()
             elif callerName == "Quit":
                 print("Exiting")
                 self.quit()
@@ -94,9 +92,17 @@ class LoginWindow(Frame):
         if callerType == "Entry":
             if callerName == "UserName":
                 self.userName = self.userNameEntry.textvariable.get()
+     
                 
-    
-    
+    def Login(self):
+        calendar_service = gdata.calendar.service.CalendarService()
+        calendar_service.email = self.userName.get()
+        calendar_service.password = self.userPass.get()
+        calendar_service.source = 'CalReader' # not really sure what this is
+        calendar_service.ProgrammaticLogin()     
+        print(self.userName.get())
+        print(self.userPass.get())
+        self.haveSubmitted = True
                 
 #>>>>>>> Reading in a user name
 class Example(Frame):
@@ -124,11 +130,11 @@ class Example(Frame):
         
         printButton = Button(self,text="Print")
         printButton.place(x = 400, y = 50)
-        
+
         
 
-for document_entry in documents_feed.entry:
-    print(document_entry.title.text)
+# for document_entry in documents_feed.entry:
+#     print(document_entry.title.text)
     
     
     
