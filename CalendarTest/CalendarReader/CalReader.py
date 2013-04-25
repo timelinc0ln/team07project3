@@ -35,6 +35,7 @@ from ttk import *
 # 
 # calendar_feed = client2.GetAllCalendarsFeed()
 
+#convert MessageWindow into a class (do later)
 
 class LoginWindow(Frame):
     quitButton = None
@@ -85,7 +86,10 @@ class LoginWindow(Frame):
             if callerName == "Submit":
                 print("Submit button pressed")
                 self.Login()
-                self.messageWindow()
+                if self.haveLogged == True:
+                    #getting this to work may take some doing
+                    self.messageWindow()
+                    #self.quit()
             elif callerName == "Quit":
                 print("Exiting")
                 self.quit()
@@ -100,10 +104,16 @@ class LoginWindow(Frame):
         calendarService.email = self.userName.get()
         calendarService.password = self.userPass.get()
         calendarService.source = 'CalReader' # not really sure what this is
-        calendarService.ProgrammaticLogin()     
-        print(self.userName.get())
-        print(self.userPass.get())
-        self.haveLogged = True
+        try:
+            calendarService.ProgrammaticLogin() #add an if statement or something to catch a bad authentication error;
+            print(self.userName.get())
+            print(self.userPass.get())
+            self.haveLogged = True
+        except gdata.service.BadAuthentication:
+            print("Bad user name or password.")
+            
+            
+        
         
     def messageWindow(self):
         if self.haveLogged == True:
