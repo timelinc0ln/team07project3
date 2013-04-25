@@ -534,14 +534,14 @@ class CalendarExample:
     self._PrintAllEventsOnDefaultCalendar()
     self._FullTextQuery()
     self._DateRangeQuery()
-
+    print("PRINTED!!!!!!!!!!!!!!!!!!!!!!!!")
     # Inserting and updating events
     see = self._InsertSingleEvent()
     see_u_title = self._UpdateTitle(see, 'New title for single event')
     see_u_reminder = self._AddReminder(see_u_title, minutes=30)
     see_u_ext_prop = self._AddExtendedProperty(see_u_reminder,
         name='propname', value='propvalue')
-    ree = self._InsertRecurringEvent()
+    #ree = self._InsertRecurringEvent()
     simple_web_content_event = self._InsertSimpleWebContentEvent()
     web_content_gadget_event = self._InsertWebContentGadgetEvent()
     quick_add_event = self._InsertQuickAddEvent()
@@ -569,7 +569,7 @@ class CalendarExample:
     if delete == 'true':
       print 'Deleting created events'
       self.cal_client.Delete(see_u_ext_prop)
-      self.cal_client.Delete(ree)
+      #self.cal_client.Delete(ree)
       self.cal_client.Delete(simple_web_content_event)
       self.cal_client.Delete(web_content_gadget_event)
       self.cal_client.Delete(quick_add_event)
