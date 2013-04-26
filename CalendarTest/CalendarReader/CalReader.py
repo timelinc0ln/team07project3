@@ -76,9 +76,19 @@ class LoginWindow(Toplevel):
 #     userName = None
 #     userPass = None
     haveLogged = False
+    windowHeight = None
+    windowWidth = None
     
+<<<<<<< HEAD
     def __init__(self):
         Toplevel.__init__(self)
+=======
+    def __init__(self, parent):
+        Frame.__init__(self, parent)
+        self.parent = parent
+        self.windowWidth = parent.winfo_width()
+        print(self.windowWidth)
+>>>>>>> Group Login Window has been designed
         self.initUI()
     
     def initUI(self):
@@ -210,9 +220,16 @@ def main():
     
     root = Tk()
     root.geometry("600x200+300+300")
+<<<<<<< HEAD
     # app = Example(root)
     app = Window(root)
 #     app = Window.MainWindow(root)
+=======
+    print(root.winfo_reqwidth())
+    #app = Example(root)
+    app = LoginWindow(root)
+    print(app.parent.winfo_width())
+>>>>>>> Group Login Window has been designed
     root.mainloop()
     
 if __name__ == '__main__':
