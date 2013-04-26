@@ -9,6 +9,7 @@ from Tkinter import *
 from ttk import *
 
 
+
 # client = gdata.docs.service.DocsService()
 # client.ClientLogin('project3team07@gmail.com', 'teamseven')
 # 
@@ -36,25 +37,55 @@ from ttk import *
 # calendar_feed = client2.GetAllCalendarsFeed()
 
 #convert MessageWindow into a class (do later)
+class Window(object):
+    """ Main Window For Program. Additional windows created from this one"""
+    isRunning = True
+    def __init__(self, parent): 
+        self.root = parent
+        self.root.title("Main Window")
+        self.frame = Frame(parent)
+        self.frame.pack()
+        self.checkWindows()
+        self.hide()
+        
+    def listener(self, arg1, arg2=None):
+        self.show()
 
-class LoginWindow(Frame):
-    quitButton = None
-    submitButton = None
-    testMessage = None
-    userNameEntry = None
-    userPassEntry = None
-    userName = None
-    userPass = None
+    def hide(self):
+        self.root.withdraw()
+        
+    def checkWindows(self):
+        while self.isRunning == True:
+            self.openWindow()
+    
+    def openWindow(self):
+        """ Add new window classes here"""
+        logWindow = LoginWindow()
+        calWindow = CalendarWindow()   
+    
+    def show(self):
+        self.root.update()
+        self.root.deiconify()
+        
+class LoginWindow(Toplevel):
+#     quitButton = None
+#     submitButton = None
+#     testMessage = None
+#     userNameEntry = None
+#     userPassEntry = None
+#     userName = None
+#     userPass = None
     haveLogged = False
     
-    def __init__(self, parent):
-        Frame.__init__(self, parent)
-        self.parent = parent
+    def __init__(self):
+        Toplevel.__init__(self)
         self.initUI()
     
     def initUI(self):
+        # setup window size
+        self.geometry("600x200+300+300")
         #define widgets for window
-        quitButton = Button(self, text="Cancel", command=lambda: self.callBack("Button", "Quit"))
+        self.quitButton = Button(self, text="Cancel", command=lambda: self.callBack("Button", "Quit"))
         submitButton = Button(self, text="Submit", command=lambda: self.callBack("Button", "Submit"))
         #testMessage = Message(self)
         self.userName = StringVar()
@@ -65,10 +96,10 @@ class LoginWindow(Frame):
         self.userPassEntry = Entry(self, textvariable=self.userPass, show="*")
         
         #set up window theme
-        self.parent.title("Login to GroupMeet")
+        self.title("Login to GroupMeet")
         self.style = Style()
-        self.style.theme_use("default")
-        self.pack(fill=BOTH, expand = 1)
+        self.style.theme_use("clam")
+        # self.pack(fill=BOTH, expand = 1)
         
         #place widgets
         self.userNamePrompt.place(x=0, y=25)
@@ -76,7 +107,10 @@ class LoginWindow(Frame):
         self.userPassPrompt.place(x=260, y=25)
         self.userPassEntry.place(x=335, y=25)
         submitButton.place(x=80, y=80)
-        quitButton.place(x=180, y=80)
+        self.quitButton.place(x=180, y=80)
+        
+    def onClose(self):
+        self.destroy()
     
     def callBack(self, callerType, callerName):
         #handle each widget's callback
@@ -86,12 +120,13 @@ class LoginWindow(Frame):
             if callerName == "Submit":
                 print("Submit button pressed")
                 self.Login()
-                if self.haveLogged == True:
+                #if self.haveLogged == True:
                     #getting this to work may take some doing
-                    self.messageWindow()
+                    #self.messageWindow()
                     #self.quit()
             elif callerName == "Quit":
                 print("Exiting")
+                self.parent.isRunning = False
                 self.quit()
         #Entries - does nothing, but shows how to use elif
         if callerType == "Entry":
@@ -109,11 +144,12 @@ class LoginWindow(Frame):
             print(self.userName.get())
             print(self.userPass.get())
             self.haveLogged = True
+            self.hide()
         except gdata.service.BadAuthentication:
             print("Bad user name or password.")
             
-            
-        
+    def hide(self):
+        self.withdraw()     
         
     def messageWindow(self):
         if self.haveLogged == True:
@@ -121,9 +157,20 @@ class LoginWindow(Frame):
             message = "The calendar will go here"
             Label(calendarFrame, text = message).pack()
             calendarFrame.geometry("700x700+100+100")
-            quitButton = Button(calendarFrame, text="OK", command=lambda: self.callBack("Button", "Quit"))
-            #quitButton = Button(calendarFrame, text = 'OK', command = calendarFrame.destroy).pack()  
-            quitButton.place(x=200, y=200)  
+            #quitButton = Button(calendarFrame, text="OK", command=lambda: self.callBack("Button", "Quit"))
+            quitButton = Button(calendarFrame, text = 'OK', command = calendarFrame.destroy).pack(side = BOTTOM)  
+            
+class CalendarWindow(Toplevel):
+    def __init__(self):
+        if LoginWindow.haveLogged == True:
+            Toplevel.__init__(self)
+            self.initUI()
+    
+    def initUI(self):
+        self.geometry("700x700+100+100")
+        self.title("Calendar Window")
+        quitButton = Button(self, text = 'OK', command = self.destroy).pack(side = BOTTOM)
+               
                 
 #>>>>>>> Reading in a user name
 class Example(Frame):
@@ -134,7 +181,7 @@ class Example(Frame):
     def initUI(self):
         self.parent.title("window title")
         self.style = Style()
-        self.style.theme_use("default")
+        self.style.theme_use("step")
         self.pack(fill=BOTH, expand = 1)
         
         quitButton = Button(self,text="Quit", command=self.quit)
@@ -163,8 +210,9 @@ def main():
     
     root = Tk()
     root.geometry("600x200+300+300")
-    #app = Example(root)
-    app = LoginWindow(root)
+    # app = Example(root)
+    app = Window(root)
+#     app = Window.MainWindow(root)
     root.mainloop()
     
 if __name__ == '__main__':
