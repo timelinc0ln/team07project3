@@ -10,7 +10,7 @@ from Tkinter import *
 from ttk import *
 
 
-#create a window to allow the user to decide which of his calendars will be added to the group calendar
+#create a window to allow the user to decide which of his/her calendars will be added to the group calendar
 class CalendarSelectionWindow(Frame):
     
     def __init__(self, parent, calendarClient):
@@ -23,12 +23,8 @@ class CalendarSelectionWindow(Frame):
         
     def initUI(self):
         #define strings for use in widgets
-        self.newNameString = StringVar()
-        self.newPassString = StringVar()
-        self.newConfirmString = StringVar()
-        self.existNameString = StringVar()
-        self.existPassString = StringVar()
         self.calendarSelectionExplanation = StringVar()
+        
         #define widgets
         #listboxes
         self.userCalendars = Listbox(self)
@@ -42,27 +38,6 @@ class CalendarSelectionWindow(Frame):
         self.userCalendarHeader = Label(self, text= "User Calendars")
         self.selectedCalendarHeader = Label(self, text= "Selected Calendars")
         
-        #widgets for "NEW" group side
-#         self.newHeader = Label(self, text="Register A New Group", underline=0)
-#         self.newName = Entry(self, textvariable=self.newNameString)
-#         self.newPass = Entry(self, textvariable=self.newPassString)
-#         self.newConfirm = Entry(self, textvariable=self.newConfirmString)
-#         self.newNamePrompt = Label(self, text="Group Name:")
-#         self.newPassPrompt = Label(self, text="Password:")
-#         self.newConfirmPrompt = Label(self, text="Confirm Password:")
-#         self.registerButton = Button(self, text="Register Group", command=lambda: self.callBack("Button","Register"))
-#         
-#         #widgets for "EXISTING" group side
-#         self.existHeader = Label(self, text="Access An Existing Group", underline=1)
-#         self.existName = Entry(self, textvariable=self.existNameString)
-#         self.existPass= Entry(self, textvariable=self.existPassString, show="*")
-#         self.existNamePrompt = Label(self, text="Group Name:")
-#         self.existPassPrompt = Label(self, text="Password:")
-#         self.loginButton = Button(self, text="Login", command=lambda: self.callBack("Button","Login"))
-#         
-#         #widget to quit
-#         self.quitButton = Button(self, text="Quit", command=lambda: self.callBack("Button","Quit"))
-#         
         #design window
         self.parent.title("Select Calendars to Sync")
         self.style = Style()
@@ -70,7 +45,7 @@ class CalendarSelectionWindow(Frame):
         self.pack(fill=BOTH, expand = 1)
         
         self.calendarSelectionMessage.grid(row=0, column=0, columnspan=8)
-        self.calendarSelectionExplanation.set("Select which of your calendars you want to have added to the group calendar below.")
+        self.calendarSelectionExplanation.set("Select which of your calendars you want to add to the group calendar below.")
         self.userCalendarHeader.grid(row=1,column=1, sticky=S)
         self.selectedCalendarHeader.grid(row=1, column=3, sticky=S)
         self.userCalendars.grid(row=2,column=1, rowspan=4, sticky=E)
@@ -81,51 +56,12 @@ class CalendarSelectionWindow(Frame):
         
         #fill the userCalendar box
         self.seedCalendarList()
-#         #handle New side
-#         self.newHeader.grid(row=0, column=0, columnspan=2, pady=5)
-#         self.newNamePrompt.grid(row=1, column=0, pady=5, sticky=E)
-#         self.newName.grid(row=1,column=1, padx=10, sticky=W)
-#         self.newPassPrompt.grid(row=2,column=0, pady=5, sticky=E)
-#         self.newPass.grid(row=2,column=1, padx=10, sticky=E)
-#         self.newConfirmPrompt.grid(row=3,column=0, pady=5, sticky=E)
-#         self.newConfirm.grid(row=3,column=1, padx=10)
-#         self.registerButton.grid(row=4,column=1, padx=10, sticky= E+S)
-#         
-#         #handle Existing side
-#         self.existHeader.grid(row=0, column=3, columnspan=2, pady=5)
-#         self.existNamePrompt.grid(row=1,column=3, pady=5, sticky=E)
-#         self.existName.grid(row=1,column=4, padx=10)
-#         self.existPassPrompt.grid(row=2,column=3, pady=5, sticky=E)
-#         self.existPass.grid(row=2,column=4, padx=10)
-#         self.loginButton.grid(row=4,column=4, padx=10, sticky=E+S)
-        
-        #self.existHeader.place(x=self.windowWidth* 1.75, y = self.windowHeight * .1)
-        #self.existNamePrompt.place(x=self.windowWidth* 2, y = self.windowHeight* .25)
-    
-        #self.existName.place(x=self.existNamePrompt.winfo_x() + self.existNamePrompt.winfo_reqwidth(), y = self.windowHeight* .25)
         
     
     def callBack(self, callerType, callerName):
         #Buttons
         if callerType == "Button":
-            if callerName == "Register":
-                print("Register clicked")
-                print(self.newNameString.get())
-                if self.groupExists(self.newNameString.get()) == True:
-                    print ("Group name is already taken. Enter a different name.")
-                else:
-                    print ("Group name is available!")
-                    
-            elif callerName == "Login":
-                print("Login clicked")
-                print(self.existNameString.get())
-                if self.groupExists(self.existNameString.get()) == True:
-                    print ("Group exists. Attempting to login.")
-                else:
-                    print ("Group does not exist. Please enter the name of a valid group!")
-            elif callerName == "Quit":
-                print("Exiting")
-            elif callerName == "Select":
+            if callerName == "Select":
                 print ("Calendar Select Button pressed")
                 self.selectCalendar()
             elif callerName == "Deselect":
