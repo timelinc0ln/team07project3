@@ -1,0 +1,24 @@
+UserDatabase = {
+	"Users": [
+	{
+		"username": "johnny112",
+		"userpassword":"applejacks", 
+		"googleid": "johnny112@gmail.com",
+		"googlepass": "password112", 
+		"grouplist": [{"groupname": "Group 1"}, {"groupname": "Group 2"}] 
+	}
+	]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

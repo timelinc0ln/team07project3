@@ -7,6 +7,7 @@ import gdata.docs.service
 import gdata.calendar.service
 from Tkinter import *
 from ttk import *
+import GroupLoginWindow
 
 
 
@@ -37,7 +38,6 @@ from ttk import *
 # calendar_feed = client2.GetAllCalendarsFeed()
 
 #convert MessageWindow into a class (do later)
-
 class Window(object):
     """ Main Window For Program. Additional windows created from this one"""
     isRunning = True
@@ -46,7 +46,7 @@ class Window(object):
         self.root.title("Main Window")
         self.frame = Frame(parent)
         self.frame.pack()
-        self.checkWindows()
+        self.openWindow()
         self.hide()
         
     def listener(self, arg1, arg2=None):
@@ -55,14 +55,13 @@ class Window(object):
     def hide(self):
         self.root.withdraw()
         
-    def checkWindows(self):
-        while self.isRunning == True:
-            self.openWindow()
+#     def checkWindows(self):
+#         while self.isRunning == True:
+#             self.openWindow()
     
     def openWindow(self):
         """ Add new window classes here"""
-        logWindow = LoginWindow()
-        calWindow = CalendarWindow()   
+        logWindow = LoginWindow(self.root)
     
     def show(self):
         self.root.update()
@@ -80,16 +79,10 @@ class LoginWindow(Toplevel):
     windowHeight = None
     windowWidth = None
     
-<<<<<<< HEAD
-    def __init__(self):
-        Toplevel.__init__(self)
-=======
+
     def __init__(self, parent):
-        Frame.__init__(self, parent)
+        Toplevel.__init__(self)
         self.parent = parent
-        self.windowWidth = parent.winfo_width()
-        print(self.windowWidth)
->>>>>>> Group Login Window has been designed
         self.initUI()
     
     def initUI(self):
@@ -130,10 +123,12 @@ class LoginWindow(Toplevel):
         if callerType == "Button":
             if callerName == "Submit":
                 print("Submit button pressed")
-                self.Login()
+                self.client = self.Login()
+                #if self.haveLogged == True:
+                    #calWindow = CalendarWindow()         
                 #if self.haveLogged == True:
                     #getting this to work may take some doing
-                    #self.messageWindow()
+                #self.messageWindow()
                     #self.quit()
             elif callerName == "Quit":
                 print("Exiting")
@@ -155,34 +150,36 @@ class LoginWindow(Toplevel):
             print(self.userName.get())
             print(self.userPass.get())
             self.haveLogged = True
+            self.showCalWindow()
             self.hide()
+            return calendarService
         except gdata.service.BadAuthentication:
             print("Bad user name or password.")
             
     def hide(self):
         self.withdraw()     
         
-    def messageWindow(self):
-        if self.haveLogged == True:
-            calendarFrame = Toplevel()
-            message = "The calendar will go here"
-            Label(calendarFrame, text = message).pack()
-            calendarFrame.geometry("700x700+100+100")
-            #quitButton = Button(calendarFrame, text="OK", command=lambda: self.callBack("Button", "Quit"))
-            quitButton = Button(calendarFrame, text = 'OK', command = calendarFrame.destroy).pack(side = BOTTOM)  
-            
+    def showCalWindow(self):
+        calWindow = CalendarWindow(self.parent, self.client) 
+           
 class CalendarWindow(Toplevel):
-    def __init__(self):
-        if LoginWindow.haveLogged == True:
+
+    def __init__(self, parent, client):
             Toplevel.__init__(self)
-            self.initUI()
-    
+            self.parent = parent
+            self.client = client
+            self.initUI()  
+          
+    def openGroupLogin(self, parent, client):
+        groupWindow = GroupLoginWindow.GroupLoginWindow(parent, client)
+                 
     def initUI(self):
         self.geometry("700x700+100+100")
         self.title("Calendar Window")
-        quitButton = Button(self, text = 'OK', command = self.destroy).pack(side = BOTTOM)
+        quitButton = Button(self, text = 'Login', command = self.openGroupLogin(self.parent, self.client)).pack(side = BOTTOM)
                
-                
+class Group():
+    None
 #>>>>>>> Reading in a user name
 class Example(Frame):
     def __init__(self, parent):
@@ -224,10 +221,10 @@ def main():
     # app = Example(root)
     app = Window(root)
 #     app = Window.MainWindow(root)
-    print(root.winfo_reqwidth())
+#     print(root.winfo_reqwidth())
     #app = Example(root)
-    app = LoginWindow(root)
-    print(app.parent.winfo_width())
+    #app = LoginWindow(root)
+    #print(app.parent.winfo_width())
     root.mainloop()
     
 if __name__ == '__main__':

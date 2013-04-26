@@ -10,10 +10,18 @@ from ttk import *
 
 
 #create a window to allow the user to login to a given group a
-class GroupLoginWindow(Frame):
+class GroupLoginWindow(Toplevel):
+    #windowHeight = None
+   # windowWidth = None
+#     newNameString = None
+#     newPassString = None
+#     newConfirmString = None
+#     existNameString = None
+#     existPassString = None
+    
     
     def __init__(self, parent, calendarClient):
-        Frame.__init__(self, parent)
+        Toplevel.__init__(self, parent)
         self.parent = parent
         self.windowWidth = parent.winfo_reqwidth()+parent.winfo_x()
         self.windowHeight = parent.winfo_reqheight()
@@ -53,7 +61,7 @@ class GroupLoginWindow(Frame):
         self.parent.title("Group Login")
         self.style = Style()
         self.style.theme_use("default")
-        self.pack(fill=BOTH, expand = 1)
+       
         
         #handle New side
         self.newHeader.grid(row=0, column=0, columnspan=2, pady=5)
