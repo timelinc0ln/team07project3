@@ -220,16 +220,13 @@ def main():
     
     root = Tk()
     root.geometry("600x200+300+300")
-<<<<<<< HEAD
     # app = Example(root)
     app = Window(root)
 #     app = Window.MainWindow(root)
-=======
     print(root.winfo_reqwidth())
     #app = Example(root)
     app = LoginWindow(root)
     print(app.parent.winfo_width())
->>>>>>> Group Login Window has been designed
     root.mainloop()
     
 if __name__ == '__main__':

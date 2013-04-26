@@ -30,11 +30,11 @@ class GroupLoginWindow(Frame):
         
     def initUI(self):
         #define strings for use in widgets
-        self.newNameString = None
-        self.newPassString = None
-        self.newConfirmString = None
-        self.existNameString = None
-        self.existPassString = None
+        self.newNameString = StringVar()
+        self.newPassString = StringVar()
+        self.newConfirmString = StringVar()
+        self.existNameString = StringVar()
+        self.existPassString = StringVar()
         #define widgets
         #widgets for "NEW" group side
         self.newHeader = Label(self, text="Register A New Group", underline=0)
@@ -49,7 +49,7 @@ class GroupLoginWindow(Frame):
         #widgets for "EXISTING" group side
         self.existHeader = Label(self, text="Access An Existing Group", underline=1)
         self.existName = Entry(self, textvariable=self.existNameString)
-        self.existPass= Entry(self, textvariable=self.existPassString)
+        self.existPass= Entry(self, textvariable=self.existPassString, show="*")
         self.existNamePrompt = Label(self, text="Group Name:")
         self.existPassPrompt = Label(self, text="Password:")
         self.loginButton = Button(self, text="Login", command=lambda: self.callBack("Button","Login"))
@@ -92,12 +92,27 @@ class GroupLoginWindow(Frame):
         if callerType == "Button":
             if callerName == "Register":
                 print("Register clicked")
+                print(self.newNameString.get())
+                if self.groupExists(self.newNameString.get()) == True:
+                    print ("Group name is already taken. Enter a different name.")
+                else:
+                    print ("Group name is available!")
+                    
             elif callerName == "Login":
                 print("Login clicked")
+                print(self.existNameString.get())
+                if self.groupExists(self.existNameString.get()) == True:
+                    print ("Group exists. Attempting to login.")
+                else:
+                    print ("Group does not exist. Please enter the name of a valid group!")
             elif callerName == "Quit":
                 print("Exiting")
        
-    
+       
+    def groupExists(self, GroupName):
+       #Compare group with name GroupName to other groups in data server; if group exists, return true, else return false
+        return False
+        
 def main():
     
     root = Tk()
