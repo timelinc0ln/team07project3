@@ -6,6 +6,9 @@ Created on Apr 26, 2013
 
 import gdata.docs.service
 import gdata.calendar.service
+import gdata.calendar.data
+import atom
+from atom import *
 from Tkinter import *
 from ttk import *
 
@@ -13,12 +16,13 @@ from ttk import *
 #create a window to allow the user to decide which of his/her calendars will be added to the group calendar
 class CalendarSelectionWindow(Frame):
     
-    def __init__(self, parent, calendarClient):
+    def __init__(self, parent, calendarClient, groupClient):
         Frame.__init__(self, parent)
         self.parent = parent
         self.windowWidth = parent.winfo_reqwidth()+parent.winfo_x()
         self.windowHeight = parent.winfo_reqheight()
         self.calendarClient = calendarClient
+        self.groupClient = groupClient
         self.initUI()
         
     def initUI(self):
@@ -73,7 +77,7 @@ class CalendarSelectionWindow(Frame):
        
     def seedCalendarList(self):
         #insert calendar names into userCalendars
-        calendar_feed = self.calendarClient.GetCalendarListFeed()
+        calendar_feed = self.calendarClient.GetOwnCalendarsFeed()
         for calendar_list_entry in calendar_feed.entry:
             self.userCalendars.insert(END, calendar_list_entry.title.text)
         return
@@ -101,13 +105,43 @@ class CalendarSelectionWindow(Frame):
     def updateGroupCalendar(self):
         #add all events from calendars listed in selectedCalendars to the Group Calendar
         #NOT WORKING YET
-        self.quit()
-        return
-    
+        
+        #find calendars listed in selectedCalendars
+        calendar_feed = self.calendarClient.GetOwnCalendarsFeed()
+        calendarsToAccess = []
+        chosenCalendars = self.selectedCalendars.get(0, END)
+        
+        for calendar_list_entry in calendar_feed.entry:
+            if calendar_list_entry.title.text in chosenCalendars:
+                calendarsToAccess.append(calendar_list_entry)
+        
+        print (len(calendarsToAccess))
+        if len(calendarsToAccess) != 0:
+            print (calendarsToAccess[0])
+        
+            #find group calendar
+            #group calendar id should be accessed as part of a group; for now, use the following variable
+            calendarID=  "pog27t596e2vu8sigfvqnvk59s@group.calendar.google.com"
+            groupCalendar = gdata.calendar.data.CalendarEntry()
+            groupCalendar.id = atom.data.Id(text=calendarID)
+            
+            #get each event in calendarsToAccess and add a duplicate event to groupCalendar
+            for cal in calendarsToAccess:
+                eventsFeed = self.calendarClient.GetCalendarEventsFeed(cal)
+                eventsFound = []
+                for event in eventsFeed.entry:
+                    eventsFound.append(event)
+                print (len(eventsFound))
+                #eventToAdd = gdata.calendar.data.CalendarEventEntry()
+                
+        
+        
            
-    def groupExists(self, GroupName):
-       #Compare group with name GroupName to other groups in data server; if group exists, return true, else return false
-        return False
+        
+        #self.quit()
+        else:
+            print("No calendars have been selected. Select a calendar to add before moving on.")
+        return
         
 def main():
     
@@ -115,8 +149,11 @@ def main():
     root.geometry("600x300+300+300")
     #print(root.geometry.)
     myClient = gdata.calendar.service.CalendarService()
-    myClient.ClientLogin("project3team07@gmail.com", "teamseven")
-    app = CalendarSelectionWindow(root, myClient)
+    myClient.ClientLogin("projthee@gmail.com", "proj3pass")
+    groupClient =  gdata.calendar.service.CalendarService()
+    groupClient.ClientLogin("project3team07@gmail.com", "teamseven")
+    
+    app = CalendarSelectionWindow(root, myClient, groupClient)
     root.mainloop()
     
 if __name__ == '__main__':

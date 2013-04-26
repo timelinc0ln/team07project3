@@ -37,6 +37,7 @@ from ttk import *
 # calendar_feed = client2.GetAllCalendarsFeed()
 
 #convert MessageWindow into a class (do later)
+
 class Window(object):
     """ Main Window For Program. Additional windows created from this one"""
     isRunning = True

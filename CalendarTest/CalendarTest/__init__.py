@@ -72,6 +72,7 @@ class CalendarExample:
     on available attributes."""
 
     feed = self.cal_client.GetOwnCalendarsFeed()
+    
     print 'Printing owncalendars: %s' % feed.title.text
     for i, a_calendar in zip(xrange(len(feed.entry)), feed.entry):
       print '\t%s. %s' % (i, a_calendar.title.text,)
