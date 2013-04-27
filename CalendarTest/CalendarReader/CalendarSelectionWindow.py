@@ -119,12 +119,18 @@ class CalendarSelectionWindow(Frame):
         if len(calendarsToAccess) != 0:
             print (calendarsToAccess[0])
         
-            #find group calendar (calendarID will be supplied by group info; for now, define it)
-        
+            #find group calendar
             #group calendar id should be accessed as part of a group; for now, use the following variable
             calendarID=  "pog27t596e2vu8sigfvqnvk59s@group.calendar.google.com"
-            calendar = gdata.calendar.data.CalendarEntry()
-            calendar.id = atom.data.Id(text=calendarID)
+            groupCalendar = gdata.calendar.data.CalendarEntry()
+            groupCalendar.id = atom.data.Id(text=calendarID)
+            
+            #get each event in calendarsToAccess and add a duplicate event to groupCalendar
+            for cal in calendarsToAccess:
+                eventsFound = []
+                eventsFound = 
+                #eventToAdd = gdata.calendar.data.CalendarEventEntry()
+                
         
         
            
