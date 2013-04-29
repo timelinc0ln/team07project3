@@ -7,6 +7,7 @@ Created on Apr 26, 2013
 import gdata.docs.service
 import gdata.calendar.service
 import gdata.calendar.data
+import gdata.calendar.client
 import atom
 from atom import *
 from Tkinter import *
@@ -111,26 +112,47 @@ class CalendarSelectionWindow(Frame):
         calendarsToAccess = []
         chosenCalendars = self.selectedCalendars.get(0, END)
         
+        #print(calendar_feed)
         for calendar_list_entry in calendar_feed.entry:
+            #print(calendar_list_entry)
             if calendar_list_entry.title.text in chosenCalendars:
                 calendarsToAccess.append(calendar_list_entry)
         
-        print (len(calendarsToAccess))
+        #print (len(calendarsToAccess))
         if len(calendarsToAccess) != 0:
-            print (calendarsToAccess[0])
-        
-            #find group calendar
-            #group calendar id should be accessed as part of a group; for now, use the following variable
-            calendarID=  "pog27t596e2vu8sigfvqnvk59s@group.calendar.google.com"
-            groupCalendar = gdata.calendar.data.CalendarEntry()
-            groupCalendar.id = atom.data.Id(text=calendarID)
+            #print (calendarsToAccess[0])
+            #print(self.calendarClient.GetCalendarEventFeed(calendar=calendarsToAccess[0]))
+            eventsFound = []
+            for cal in calendarsToAccess:
+                print(cal.title)
+                #calendarEventFeed = self.calendarClient.GetCalendarEventFeed(calendar=cal.id, scheme=none)
+                calEventFeedUri = self.calendarClient.GetCalendarEventFeedUri(calendar=cal.id)
+                print (calEventFeedUri)
+                calEventFeed = self.calendarClient.GetCalendarEventFeed(calendar=cal.id)
+                print (calEventFeedUri)
+                #print (calEventFeed)
+                for calEvent in calEventFeed.entry:
+                     print (calEvent.title)
+#                     eventsFound.append(calEvent)
+#                     print (len(eventsFound))
+            
+            
+            
+            
+#             #find group calendar
+#             #group calendar id should be accessed as part of a group; for now, use the following variable
+#             calendarID=  "pog27t596e2vu8sigfvqnvk59s@group.calendar.google.com"
+#             groupCalendar = gdata.calendar.data.CalendarEntry()
+#             groupCalendar.id = atom.data.Id(text=calendarID)
+#             print(groupCalendar)
             
             #get each event in calendarsToAccess and add a duplicate event to groupCalendar
-            for cal in calendarsToAccess:
-                eventsFound = []
-                eventsFound = 
-                #eventToAdd = gdata.calendar.data.CalendarEventEntry()
+#             for cal in calendarsToAccess:
+#                 eventsFound = []
+#                 eventToAdd = gdata.calendar.data.CalendarEventEntry()
                 
+#                 print (currentCalendar)
+#                 events = self.calendarClient.GetCalendarEventFeed(currentCalendar)
         
         
            
@@ -145,8 +167,8 @@ def main():
     root = Tk()
     root.geometry("600x300+300+300")
     #print(root.geometry.)
-    myClient = gdata.calendar.service.CalendarService()
-    myClient.ClientLogin("projthee@gmail.com", "proj3pass")
+    myClient = gdata.calendar.client.CalendarClient()
+    myClient.ClientLogin("projthee@gmail.com", "proj3pass", source = "Bla")
     groupClient =  gdata.calendar.service.CalendarService()
     groupClient.ClientLogin("project3team07@gmail.com", "teamseven")
     

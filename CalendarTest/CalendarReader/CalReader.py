@@ -5,6 +5,7 @@ Created on Apr 18, 2013
 '''
 import gdata.docs.service
 import gdata.calendar.service
+import gdata.calendar.client
 from Tkinter import *
 from ttk import *
 import GroupLoginWindow
