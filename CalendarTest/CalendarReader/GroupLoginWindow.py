@@ -112,6 +112,8 @@ class GroupLoginWindow(Toplevel):
     def groupExists(self, GroupName):
        #Compare group with name GroupName to other groups in data server; if group exists, return true, else return false
         return False
+    
+    
         
 def main():
     
