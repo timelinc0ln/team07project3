@@ -22,18 +22,20 @@ class ConfirmEventWindow(Toplevel):
         self.eventName = eventName
         self.eventDate = eventDate
         self.eventPlace = eventPlace
+        self.readableEventDate = self.parseDate(self.eventDate)
+        print(self.readableEventDate)
         self.initUI()
         
     def initUI(self):
         #define widgets
-
+        
         #Labels
         self.instructionsLabel = Label(self, text="Is this the event you want to add to the calendar?")
         self.nameLabelPrompt = Label(self, text="Name:", background="lightgray")
         self.dateLabelPrompt = Label(self, text="Date:", background="lightgray")
         self.placeLabelPrompt = Label(self, text="Location:", background="lightgray")
         self.nameLabel = Label(self, text=self.eventName, background="lightgray")
-        self.dateLabel = Label(self, text=self.eventDate, background="lightgray")
+        self.dateLabel = Label(self, text=self.readableEventDate, background="lightgray")
         self.placeLabel = Label(self, text=self.eventPlace, background="lightgray")
         #Buttons
         self.modifyNameButton = Button(self, text="Change Name", command=lambda: self.callBack("Button","Name"))
@@ -91,14 +93,60 @@ class ConfirmEventWindow(Toplevel):
                 #hide the window, show mainMenu Window
                 self.withdraw()
 
+    def parseDate(self, rawDate):
+        date = ""
+        year = rawDate[:4:]
+        month = self.parseMonth(rawDate[5:7:])
+        day = rawDate[8:10:]
+        time = rawDate[11:19:]
+        timezone = rawDate[19::]
         
+#         self.parseTime(time, timezone)
+        
+        date = month + " " + day + ", " + year + " at " + time + " (" + timezone + ")"
+        return date
+    
+#     def parseTime(self, rawTime, rawTimeZone):
+#         hour = 0
+#         min = 0
+#         sec = 0
+#         
+#         time = "" + string(hour) + ":" + string(min) + ":" + sec
+#         print time
+        
+    def parseMonth(self, rawMonth):
+        if rawMonth == "01":
+            return "January"
+        elif rawMonth == "02":
+            return "February"
+        elif rawMonth == "03":
+            return "March"
+        elif rawMonth == "04":
+            return "April"
+        elif rawMonth == "05":
+            return "May"
+        elif rawMonth == "06":
+            return "June"
+        elif rawMonth == "07":
+            return "July"
+        elif rawMonth == "08":
+            return "August"
+        elif rawMonth == "09":
+            return "September"
+        elif rawMonth == "10":
+            return "October"
+        elif rawMonth == "11":
+            return "November"
+        elif rawMonth == "12":
+            return "December"
+
 def main():
     
     root = Tk()
     root.geometry("600x155+300+300")
     #print(root.geometry.)
     eventName = "Basketball"
-    eventDate = "March 3rd "
+    eventDate = "2013-08-09T10:57:00+02:00"
     eventPlace = "Space"
     app = ConfirmEventWindow(root, gdata.calendar.client.CalendarClient(), eventName, eventDate, eventPlace)
     root.mainloop()
