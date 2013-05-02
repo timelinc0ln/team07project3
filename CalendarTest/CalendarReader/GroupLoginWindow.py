@@ -58,7 +58,7 @@ class GroupLoginWindow(Toplevel):
         self.quitButton = Button(self, text="Quit", command=lambda: self.callBack("Button","Quit"))
         
         #design window
-        self.parent.title("Group Login")
+        self.title("Group Login")
         self.style = Style()
         self.style.theme_use("default")
        
