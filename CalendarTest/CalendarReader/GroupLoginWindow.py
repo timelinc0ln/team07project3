@@ -39,8 +39,8 @@ class GroupLoginWindow(Toplevel):
         #widgets for "NEW" group side
         self.newHeader = Label(self, text="Register A New Group", underline=0)
         self.newName = Entry(self, textvariable=self.newNameString)
-        self.newPass = Entry(self, textvariable=self.newPassString)
-        self.newConfirm = Entry(self, textvariable=self.newConfirmString)
+        self.newPass = Entry(self, textvariable=self.newPassString, show ='*')
+        self.newConfirm = Entry(self, textvariable=self.newConfirmString, show ='*')
         self.newNamePrompt = Label(self, text="Group Name:")
         self.newPassPrompt = Label(self, text="Password:")
         self.newConfirmPrompt = Label(self, text="Confirm Password:")

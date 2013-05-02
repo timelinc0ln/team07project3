@@ -9,34 +9,8 @@ import gdata.calendar.client
 from Tkinter import *
 from ttk import *
 import GroupLoginWindow
-
-
-
-# client = gdata.docs.service.DocsService()
-# client.ClientLogin('project3team07@gmail.com', 'teamseven')
-# 
-# documents_feed = client.GetDocumentListFeed()
-# 
-# client2 = gdata.calendar.service.CalendarService()
-# # client2.ClientLogin(username, password, account_type, service, auth_service_url, source, captcha_token, captcha_response)
-# client2.ClientLogin('project3team07@gmail.com', 'teamseven', "HOSTED_OR_GOOGLE", "cl", None, None, None, None)
-# 
-# print(client2.account_type)
-# 
-# calendar_feed = client2.GetCalendarListFeed()
-# for calendar_list_entry in calendar_feed.entry:
-#     
-#     if calendar_list_entry.title.text == "Test Calendar":
-#        print(calendar_list_entry.title.text)
-#        #calendar_event_feed = calendar_list_entry.GetCalendarEventFeed()
-#         #for calendar_event_list_entry in calendar_event_feed.entry:
-#             #print(calendar_event_list_entry.title.text)
-#        print("I found it")
-# 
-# 
-# 
-# 
-# calendar_feed = client2.GetAllCalendarsFeed()
+import MapWindow
+import webbrowser
 
 #convert MessageWindow into a class (do later)
 class Window(object):
@@ -69,13 +43,6 @@ class Window(object):
         self.root.deiconify()
         
 class LoginWindow(Toplevel):
-#     quitButton = None
-#     submitButton = None
-#     testMessage = None
-#     userNameEntry = None
-#     userPassEntry = None
-#     userName = None
-#     userPass = None
     haveLogged = False
     windowHeight = None
     windowWidth = None
@@ -125,12 +92,6 @@ class LoginWindow(Toplevel):
             if callerName == "Submit":
                 print("Submit button pressed")
                 self.client = self.Login()
-                #if self.haveLogged == True:
-                    #calWindow = CalendarWindow()         
-                #if self.haveLogged == True:
-                    #getting this to work may take some doing
-                #self.messageWindow()
-                    #self.quit()
             elif callerName == "Quit":
                 print("Exiting")
                 self.parent.isRunning = False
@@ -161,7 +122,8 @@ class LoginWindow(Toplevel):
         self.withdraw()     
         
     def showCalWindow(self):
-        calWindow = CalendarWindow(self.parent, self.client) 
+        calWindow = CalendarWindow(self.parent, self.client)
+        webbrowser.open('calendar.html') 
            
 class CalendarWindow(Toplevel):
 
@@ -177,7 +139,7 @@ class CalendarWindow(Toplevel):
     def initUI(self):
         self.geometry("700x700+100+100")
         self.title("Calendar Window")
-        quitButton = Button(self, text = 'Login', command = self.openGroupLogin(self.parent, self.client)).pack(side = BOTTOM)
+        loginButton = Button(self, text = 'Login', command = self.openGroupLogin(self.parent, self.client)).pack(side = BOTTOM)
                
 class Group():
     None
@@ -208,24 +170,12 @@ class Example(Frame):
         printButton = Button(self,text="Print")
         printButton.place(x = 400, y = 50)
 
-        
-
-# for document_entry in documents_feed.entry:
-#     print(document_entry.title.text)
-    
-    
-    
+       
 def main():
     
     root = Tk()
     root.geometry("600x200+300+300")
-    # app = Example(root)
     app = Window(root)
-#     app = Window.MainWindow(root)
-#     print(root.winfo_reqwidth())
-    #app = Example(root)
-    #app = LoginWindow(root)
-    #print(app.parent.winfo_width())
     root.mainloop()
     
 if __name__ == '__main__':
