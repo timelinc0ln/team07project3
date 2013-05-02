@@ -1,0 +1,13 @@
+{ 
+   "table":"contacts", 
+   "records":[ 
+      { 
+         "name":"John", 
+         "phone":"555-555-4444" 
+      }, 
+      { 
+         "name":"Jane", 
+         "phone":"555-555-3333" 
+      } 
+   ] 
+}
