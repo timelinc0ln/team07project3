@@ -7,7 +7,7 @@ import gdata.docs.service
 import gdata.calendar.service
 from Tkinter import *
 from ttk import *
-
+import json
 
 #create a window to allow the user to login to a given group a
 class GroupLoginWindow(Toplevel):
@@ -18,6 +18,7 @@ class GroupLoginWindow(Toplevel):
 #     newConfirmString = None
 #     existNameString = None
 #     existPassString = None
+    groupdata = None
     
     
     def __init__(self, parent, calendarClient):
@@ -26,6 +27,7 @@ class GroupLoginWindow(Toplevel):
         self.windowWidth = parent.winfo_reqwidth()+parent.winfo_x()
         self.windowHeight = parent.winfo_reqheight()
         self.calendarClient = calendarClient
+        self.read_groupdata('GroupDatabase.json')
         self.initUI()
         
     def initUI(self):
@@ -86,10 +88,20 @@ class GroupLoginWindow(Toplevel):
     
         #self.existName.place(x=self.existNamePrompt.winfo_x() + self.existNamePrompt.winfo_reqwidth(), y = self.windowHeight* .25)
         
+    def read_groupdata(self, filename):
+        json_data=open(filename)
+        data=json.load(json_data)
+        self.groupdata=data
     
+    def write_groupdata(self, filename):
+        with open(filename, 'w') as outfile:
+            json.dump(self.groupdata, outfile)        
+            
+            
     def callBack(self, callerType, callerName):
         #Buttons
         if callerType == "Button":
+            
             if callerName == "Register":
                 print("Register clicked")
                 print(self.newNameString.get())
@@ -97,20 +109,39 @@ class GroupLoginWindow(Toplevel):
                     print ("Group name is already taken. Enter a different name.")
                 else:
                     print ("Group name is available!")
-                    
+                    if self.confirmPassword(self.newPassString.get(), self.newConfirmString.get()):
+                        self.addGroup(self.newNameString.get(), self.newPassString.get(), "William");
+                    else :
+                        print("Passwords don't match.")
             elif callerName == "Login":
                 print("Login clicked")
                 print(self.existNameString.get())
                 if self.groupExists(self.existNameString.get()) == True:
                     print ("Group exists. Attempting to login.")
+                    self.groupLogin(self.existNameString.get(), self.existPassString.get())
                 else:
                     print ("Group does not exist. Please enter the name of a valid group!")
             elif callerName == "Quit":
                 print("Exiting")
        
+    def confirmPassword (self, password, confirmPassword):
+        if password==confirmPassword:
+            return True;
+        return False;
        
     def groupExists(self, GroupName):
        #Compare group with name GroupName to other groups in data server; if group exists, return true, else return false
+       for Groups in self.groupdata['Groups']:
+            if Groups['groupname']==GroupName:
+                return True
+       return False 
+    
+    
+    def addGroup(self, GroupName, password, memberName):
+        self.groupdata['Groups'].append({"groupname":GroupName, "datecreated":"5/2/2013",
+                                          "calendarid":"Empty for now", "password":password, 
+                                          "members":[{"name":memberName}]})
+        self.write_groupdata('GroupDatabase.json')
         return False
     
     
