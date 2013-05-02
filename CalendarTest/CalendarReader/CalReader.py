@@ -126,7 +126,6 @@ class LoginWindow(Toplevel):
         webbrowser.open('calendar.html') 
            
 class CalendarWindow(Toplevel):
-
     def __init__(self, parent, client):
             Toplevel.__init__(self)
             self.parent = parent
@@ -139,7 +138,10 @@ class CalendarWindow(Toplevel):
     def initUI(self):
         self.geometry("700x700+100+100")
         self.title("Calendar Window")
-        loginButton = Button(self, text = 'Login', command = self.openGroupLogin(self.parent, self.client)).pack(side = BOTTOM)
+        loginButton = Button(self, text = 'Login', command =lambda: self.openGroupLogin(self.parent, self.client)).pack(side = BOTTOM)
+        self.newHeader = Label(self, text = "Instructions:")
+        
+        self.newHeader.grid(row=0, column=0, columnspan=2, pady=5)
                
 class Group():
     None
