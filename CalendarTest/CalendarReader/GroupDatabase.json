@@ -1,1 +1,6 @@
-{"Groups": [{"groupName": "Group 1", "password": "1234", "calendarId": "Empty for now", "members": [{"name": "Will"}], "dateCreated": "4/26/2013"}, {"groupName": "Group 2", "password": "4321", "calendarId": "Empty for now", "members": [{"name": "John"}], "dateCreated": "1/17/2012"}, {"groupName": "a", "password": "a", "calendarId": "Empty for now", "members": [{"name": "William"}], "dateCreated": "5/2/2013"}]}
+{"Groups": 
+[{"groupName": "Group 1", "password": "1234", "calendarId": "Empty for now", "members": [{"name": "Will"}], "dateCreated": "4/26/2013"}, 
+{"groupName": "Group 2", "password": "4321", "calendarId": "Empty for now", "members": [{"name": "John"}], "dateCreated": "1/17/2012"}, 
+{"groupName": "b", "password": "b", "calendarId": "qftarqlven381p3grcbsh0ldig%40group.calendar.google.com", "members": [{"name": "William"}], "dateCreated": "2013-05-02T20:54:11 ()"}
+]
+}

@@ -7,6 +7,7 @@ import gdata.docs.service
 import gdata.calendar.service
 import gdata.calendar.client
 import gdata.calendar.data
+import datetime
 import CalAccessMethods
 from Tkinter import *
 from ttk import *
@@ -142,6 +143,7 @@ class GroupLoginWindow(Toplevel):
         self.serverClient.InsertCalendar(new_calendar=groupCalendar)
     
     def getGroupCalendarID(self,groupName):
+        #get the ID of the group calendar
         calendar_feed = self.serverClient.GetOwnCalendarsFeed()
         for calendar_list_entry in calendar_feed.entry:
             if calendar_list_entry.title.text == groupName:
@@ -152,8 +154,8 @@ class GroupLoginWindow(Toplevel):
         self.addGroupCalendar(groupName)
         #get the ID of the calendar
         groupCalendarID = self.getGroupCalendarID(groupName)
-        
-        self.groupData['Groups'].append({"groupName":groupName, "dateCreated":"5/2/2013",
+        currTime = CalAccessMethods.getTime()
+        self.groupData['Groups'].append({"groupName":groupName, "dateCreated":currTime,
                                           "calendarId":groupCalendarID, "password":password, 
                                           "members":[{"name":memberName}]})
         self.write_groupData('GroupDatabase.json')

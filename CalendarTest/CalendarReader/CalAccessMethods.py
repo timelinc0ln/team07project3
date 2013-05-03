@@ -8,6 +8,7 @@ import gdata.calendar.service
 import gdata.calendar.data
 import gdata.calendar.client
 import atom
+import datetime
 from atom import *
 from Tkinter import *
 from ttk import *
@@ -83,3 +84,7 @@ def modifyEvent(rawEvent, userName):
     print("")
     print(rawEvent)
   
+  
+def getTime():
+    now = datetime.datetime.now()
+    return now.strftime("%Y-%m-%dT%H:%M:%S")
