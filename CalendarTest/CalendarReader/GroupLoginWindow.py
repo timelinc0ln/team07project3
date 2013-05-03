@@ -17,11 +17,12 @@ import json
 class GroupLoginWindow(Toplevel):
     #groupdata = None
     
-    def __init__(self, parent, calendarClient, serverClient):
+    def __init__(self, parent, userName, calendarClient, serverClient):
         Toplevel.__init__(self, parent)
         self.parent = parent
         self.windowWidth = parent.winfo_reqwidth()+parent.winfo_x()
         self.windowHeight = parent.winfo_reqheight()
+        self.userName = userName
         self.calendarClient = calendarClient
         self.serverClient = serverClient
         self.read_groupData('GroupDatabase.json')
@@ -29,33 +30,7 @@ class GroupLoginWindow(Toplevel):
         self.initUI()
         
     def initUI(self):
-        #define strings for use in widgets
-        self.newNameString = StringVar()
-        self.newPassString = StringVar()
-        self.newConfirmString = StringVar()
-        self.existNameString = StringVar()
-        self.existPassString = StringVar()
-        #define widgets
-        #widgets for "NEW" group side
-        self.newHeader = Label(self, text="Register A New Group", underline=0)
-        self.newName = Entry(self, textvariable=self.newNameString)
-        self.newPass = Entry(self, textvariable=self.newPassString, show ='*')
-        self.newConfirm = Entry(self, textvariable=self.newConfirmString, show ='*')
-        self.newNamePrompt = Label(self, text="Group Name:")
-        self.newPassPrompt = Label(self, text="Password:")
-        self.newConfirmPrompt = Label(self, text="Confirm Password:")
-        self.registerButton = Button(self, text="Register Group", command=lambda: self.callBack("Button","Register"))
-        
-        #widgets for "EXISTING" group side
-        self.existHeader = Label(self, text="Access An Existing Group", underline=0)
-        self.existName = Entry(self, textvariable=self.existNameString)
-        self.existPass= Entry(self, textvariable=self.existPassString, show="*")
-        self.existNamePrompt = Label(self, text="Group Name:")
-        self.existPassPrompt = Label(self, text="Password:")
-        self.loginButton = Button(self, text="Login", command=lambda: self.callBack("Button","Login"))
-        
-        #widget to quit
-        self.quitButton = Button(self, text="Quit", command=lambda: self.callBack("Button","Quit"))
+        self.defineWidgets()
         
         #design window
         self.title("Group Login")
@@ -63,24 +38,56 @@ class GroupLoginWindow(Toplevel):
         self.style.theme_use("default")
         self.configure(background="lightgray")
         
+        self.placeWidgets()
+        
+    def defineWidgets(self):
+        #define strings for use in widgets
+        self.newNameString = StringVar()
+        self.newPassString = StringVar()
+        self.newConfirmString = StringVar()
+        self.existNameString = StringVar()
+        self.existPassString = StringVar()
+        self.errorLabelString = StringVar()
+        #define widgets
+        #widgets for "NEW" group side
+        self.newHeader = Label(self, text="Register A New Group", underline=0, background = "lightgray")
+        self.newName = Entry(self, textvariable=self.newNameString)
+        self.newPass = Entry(self, textvariable=self.newPassString, show ='*')
+        self.newConfirm = Entry(self, textvariable=self.newConfirmString, show ='*')
+        self.newNamePrompt = Label(self, text="Group Name:", background = "lightgray")
+        self.newPassPrompt = Label(self, text="Password:", background = "lightgray")
+        self.newConfirmPrompt = Label(self, text="Confirm Password:", background = "lightgray")
+        self.registerButton = Button(self, text="Register Group", command=lambda: self.callBack("Button","Register"))
+        
+        #widgets for "EXISTING" group side
+        self.existHeader = Label(self, text="Access An Existing Group", underline=0, background = "lightgray")
+        self.existName = Entry(self, textvariable=self.existNameString)
+        self.existPass= Entry(self, textvariable=self.existPassString, show="*")
+        self.existNamePrompt = Label(self, text="Group Name:", background = "lightgray")
+        self.existPassPrompt = Label(self, text="Password:", background = "lightgray")
+        self.loginButton = Button(self, text="Login", command=lambda: self.callBack("Button","Login"))
+        
+        
+    def placeWidgets(self):
         #handle New side
         self.newHeader.grid(row=0, column=0, columnspan=2, pady=5)
-        self.newNamePrompt.grid(row=1, column=0, pady=5, sticky=E)
+        self.newNamePrompt.grid(row=1, column=0, padx=5, pady=5, sticky=E+W)
         self.newName.grid(row=1,column=1, padx=10, sticky=W)
-        self.newPassPrompt.grid(row=2,column=0, pady=5, sticky=E)
+        self.newPassPrompt.grid(row=2,column=0, padx=5, pady=5, sticky=E+W)
         self.newPass.grid(row=2,column=1, padx=10, sticky=E)
-        self.newConfirmPrompt.grid(row=3,column=0, pady=5, sticky=E)
+        self.newConfirmPrompt.grid(row=3,column=0, padx=5, pady=5, sticky=E+W)
         self.newConfirm.grid(row=3,column=1, padx=10)
-        self.registerButton.grid(row=4,column=1, padx=10, pady=5, sticky= E+S)
+        self.registerButton.grid(row=4,column=1, padx=10, pady=5, sticky= E+W+S)
         
         #handle Existing side
         self.existHeader.grid(row=0, column=3, columnspan=2, pady=5)
-        self.existNamePrompt.grid(row=1,column=3, pady=5, sticky=E)
+        self.existNamePrompt.grid(row=1,column=3, pady=5, sticky=E+W)
         self.existName.grid(row=1,column=4, padx=10)
-        self.existPassPrompt.grid(row=2,column=3, pady=5, sticky=E)
+        self.existPassPrompt.grid(row=2,column=3, pady=5, sticky=E+W)
         self.existPass.grid(row=2,column=4, padx=10)
-        self.loginButton.grid(row=4,column=4, padx=10, pady=5, sticky=E+S)
-        
+        self.loginButton.grid(row=4,column=4, padx=10, pady=5, sticky=E+W+S)
+
+    
     def read_groupData(self, filename):
         json_data=open(filename)
         groupData=json.load(json_data)
@@ -94,47 +101,90 @@ class GroupLoginWindow(Toplevel):
         json_data=open(filename)
         userData=json.load(json_data)
         self.userData=userData
+    
+    def allFieldsCompleted(self, callerName):
+        if callerName == "Register":
+            if self.newNameString.get() == "":
+                return False
+            if self.newPassString.get() == "":
+                return False
+            if self.newConfirmString.get() == "":
+                return False
+            return True
             
+        elif callerName == "Login":
+            if self.existNameString.get() == "":
+                return False
+            if self.existPassString.get() == "":
+                return False
+            return True
+    
     def callBack(self, callerType, callerName):
         #Buttons
         if callerType == "Button":
             
             if callerName == "Register":
+                
                 print("Register clicked")
-                print(self.newNameString.get())
-                if self.groupExists(self.newNameString.get()) == True:
-                    print ("Group name is already taken. Enter a different name.")
-                else:
-                    print ("Group name is available!")
-                    if self.confirmPassword(self.newPassString.get(), self.newConfirmString.get()):
-                        print("Adding new group!")
-                        self.addGroup(self.newNameString.get(), self.newPassString.get(), "William");
-                    else :
-                        print("Passwords don't match.")
-                        
-            elif callerName == "Login":
-                print("Login clicked")
-                print(self.existNameString.get())
-                if self.groupExists(self.existNameString.get()) == True:
-                    print ("Group exists. Attempting to login.")
+                if self.allFieldsCompleted(callerName):
                     
-                    self.groupLogin(self.existNameString.get(), self.existPassString.get())
+                    groupName = self.newNameString.get()
+                    groupPass = self.newPassString.get()
+                    confirmPass = self.newConfirmString.get()
+                    
+                    if self.groupExists(groupName) == True:
+                        print ("Group name is already taken. Enter a different name.")
+                    else:
+                        print ("Group name is available!")
+                        if self.confirmPassword(groupPass, confirmPass):
+                            if groupPass != "" and confirmPass != "":
+                                print("Adding new group!")
+                                self.addGroup(groupName, groupPass, self.userName);
+                                #minimize and go to CalendarSelectionWindow
+                        else :
+                            print("Passwords don't match.")
                 else:
-                    print ("Group does not exist. Please enter the name of a valid group!")
-            elif callerName == "Quit":
-                print("Exiting")
+                    print ("Invalid registration; please fill all entry fields.")
+            #break this down and make it more legible
+            elif callerName == "Login":
+                
+                
+                print("Login clicked")
+                if self.allFieldsCompleted(callerName):
+                    
+                    groupName = self.existNameString.get()
+                    groupPass = self.existPassString.get()
+                    if self.groupExists(groupName) == True:
+                        print ("Group exists. Attempting to login.")
+                        if self.groupLogin(groupName, groupPass) == True:
+                            print("Login Successful!")
+                            #determine whether or not the user is part of the group
+                            if self.userInGroup(groupName, self.userName) == True:
+                                #pass group information to CalendarWindow
+                                print("Existing user")
+                            else:
+                                #pass group information to CalendarSelectionWindow
+                                print("New user")
+                        else:
+                            print("Incorrect Password. Login Failed.")
+                    else:
+                        print ("Group does not exist. Please enter the name of a valid group!")
+                else:
+                    print ("Invalid login; please fill all entry fields.")
+                        
        
     def confirmPassword (self, password, confirmPassword):
+        #compare password and confirmPassword; if they match, return True, else return false
         if password==confirmPassword:
             return True;
         return False;
        
     def groupExists(self, groupName):
-       #Compare group with name GroupName to other groups in data server; if group exists, return true, else return false
-       for Groups in self.groupData['Groups']:
+        #Compare group with name GroupName to other groups in data server; if group exists, return true, else return false
+        for Groups in self.groupData['Groups']:
             if Groups['groupName']==groupName:
                 return True
-       return False 
+        return False 
     
     def addGroupCalendar(self,groupName):
         #create a new calendar on the server account for the group
@@ -154,14 +204,18 @@ class GroupLoginWindow(Toplevel):
         self.addGroupCalendar(groupName)
         #get the ID of the calendar
         groupCalendarID = self.getGroupCalendarID(groupName)
+        #get current time
         currTime = CalAccessMethods.getTime()
+        #add group to database
         self.groupData['Groups'].append({"groupName":groupName, "dateCreated":currTime,
                                           "calendarId":groupCalendarID, "password":password, 
                                           "members":[{"name":memberName}]})
         self.write_groupData('GroupDatabase.json')
+        
         return
     
     def userInGroup(self, groupName, userName):
+        #determine whether userName is in group groupName
         for Groups in self.groupData['Groups']:
             if Groups['groupName']==groupName:
                 for Members in Groups['members']:
@@ -169,21 +223,31 @@ class GroupLoginWindow(Toplevel):
                         return True
         return False
     
+    
+    
     def groupLogin(self, groupName, groupPass):
-        #find the appropriate group and pass 
+        #find the appropriate group
+        for Groups in self.groupData['Groups']:
+            if Groups['groupName']==groupName:
+                #check to see if groupPass and the stored password match
+                if self.confirmPassword(groupPass, Groups['password']) == True:
+                    return True
+                else:
+                    return False
         return False
-#     def addUserToGroup(self):
+
         
 def main():
     
     root = Tk()
     root.geometry("600x155+300+300")
     #print(root.geometry.)
+    userName = "Spartacus"
     calendarClient =  gdata.calendar.client.CalendarClient()
     calendarClient.ClientLogin("projthee@gmail.com", "proj3pass", source = "User Login")
     serverClient =  gdata.calendar.client.CalendarClient()
     serverClient.ClientLogin("project3team07@gmail.com", "teamseven", source = "Calendar Access")
-    app = GroupLoginWindow(root, calendarClient, serverClient)
+    app = GroupLoginWindow(root, userName, calendarClient, serverClient)
     root.mainloop()
     
 if __name__ == '__main__':
