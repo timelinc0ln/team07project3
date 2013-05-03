@@ -1,9 +1,9 @@
 {
 	"Groups": [
 	{
-		"groupname": "Group 1",
-		"datecreated": "4/26/2013",
-		"calendarid": "Empty for now",
+		"groupName": "Group 1",
+		"dateCreated": "4/26/2013",
+		"calendarId": "Empty for now",
 		"password": "1234",
 		"members": [
 		{ "name": "Cullen", 
@@ -12,9 +12,9 @@
 		]
 	},
 	{
-		"groupname": "Group 2",
-		"datecreated": "1/17/2012",
-		"calendarid": "Empty for now",
+		"groupName": "Group 2",
+		"dateCreated": "1/17/2012",
+		"calendarId": "Empty for now",
 		"password": "4321",
 		"members": [ 
 		{ "name": "Jim", 

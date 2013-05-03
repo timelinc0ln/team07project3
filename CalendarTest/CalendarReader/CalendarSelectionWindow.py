@@ -8,6 +8,7 @@ import gdata.docs.service
 import gdata.calendar.service
 import gdata.calendar.data
 import gdata.calendar.client
+import CalAccessMethods
 import atom
 from atom import *
 from Tkinter import *
@@ -124,18 +125,18 @@ class CalendarSelectionWindow(Frame):
             #print(self.calendarClient.GetCalendarEventFeed(calendar=calendarsToAccess[0]))
             eventsFound = []
             for cal in calendarsToAccess:
-                print(cal.title)
-                #calendarEventFeed = self.calendarClient.GetCalendarEventFeed(calendar=cal.id, scheme=none)
-                calEventFeedUri = self.calendarClient.GetCalendarEventFeedUri(calendar=cal.id)
+                print(cal.title.text)
+                #get actual calendar id from calendar uri
+                calID = CalAccessMethods.getCalendarID(cal.id.text)
+                calEventFeedUri = self.calendarClient.GetCalendarEventFeedUri(calID)
                 print (calEventFeedUri)
-                calEventFeed = self.calendarClient.GetCalendarEventFeed(calendar=cal.id)
-                print (calEventFeedUri)
-                #print (calEventFeed)
+                calEventFeed = self.calendarClient.GetCalendarEventFeed(uri=calEventFeedUri)
+
                 for calEvent in calEventFeed.entry:
-                     print (calEvent.title)
+                     print (calEvent.title.text)
 #                     eventsFound.append(calEvent)
 #                     print (len(eventsFound))
-            
+                print("")
             
             
             
@@ -168,7 +169,8 @@ def main():
     root.geometry("600x300+300+300")
     #print(root.geometry.)
     myClient = gdata.calendar.client.CalendarClient()
-    myClient.ClientLogin("projthee@gmail.com", "proj3pass", source = "Bla")
+#     myClient.ClientLogin("projthee@gmail.com", "proj3pass", source = "Bla")
+    myClient.ClientLogin("project3team07@gmail.com", "teamseven", source = "Bla")
     groupClient =  gdata.calendar.service.CalendarService()
     groupClient.ClientLogin("project3team07@gmail.com", "teamseven")
     
