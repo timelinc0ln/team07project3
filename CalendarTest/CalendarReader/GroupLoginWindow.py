@@ -5,6 +5,9 @@ Created on Apr 25, 2013
 '''
 import gdata.docs.service
 import gdata.calendar.service
+import gdata.calendar.client
+import gdata.calendar.data
+import CalAccessMethods
 from Tkinter import *
 from ttk import *
 import json
@@ -13,12 +16,13 @@ import json
 class GroupLoginWindow(Toplevel):
     #groupdata = None
     
-    def __init__(self, parent, calendarClient):
+    def __init__(self, parent, calendarClient, serverClient):
         Toplevel.__init__(self, parent)
         self.parent = parent
         self.windowWidth = parent.winfo_reqwidth()+parent.winfo_x()
         self.windowHeight = parent.winfo_reqheight()
         self.calendarClient = calendarClient
+        self.serverClient = serverClient
         self.read_groupData('GroupDatabase.json')
         self.read_userData('UserDatabase.json')
         self.initUI()
@@ -131,10 +135,26 @@ class GroupLoginWindow(Toplevel):
                 return True
        return False 
     
+    def addGroupCalendar(self,groupName):
+        #create a new calendar on the server account for the group
+        calendarDescription = "Calendar for group " + groupName + "."
+        groupCalendar = CalAccessMethods.createCalendar(title=groupName, description=calendarDescription)
+        self.serverClient.InsertCalendar(new_calendar=groupCalendar)
+    
+    def getGroupCalendarID(self,groupName):
+        calendar_feed = self.serverClient.GetOwnCalendarsFeed()
+        for calendar_list_entry in calendar_feed.entry:
+            if calendar_list_entry.title.text == groupName:
+                return CalAccessMethods.getCalendarID(calendar_list_entry.id.text)
     
     def addGroup(self, groupName, password, memberName):
+        #create the calendar the group will be using
+        self.addGroupCalendar(groupName)
+        #get the ID of the calendar
+        groupCalendarID = self.getGroupCalendarID(groupName)
+        
         self.groupData['Groups'].append({"groupName":groupName, "dateCreated":"5/2/2013",
-                                          "calendarId":"Empty for now", "password":password, 
+                                          "calendarId":groupCalendarID, "password":password, 
                                           "members":[{"name":memberName}]})
         self.write_groupData('GroupDatabase.json')
         return
@@ -157,7 +177,11 @@ def main():
     root = Tk()
     root.geometry("600x155+300+300")
     #print(root.geometry.)
-    app = GroupLoginWindow(root, gdata.calendar.service.CalendarService())
+    calendarClient =  gdata.calendar.client.CalendarClient()
+    calendarClient.ClientLogin("projthee@gmail.com", "proj3pass", source = "User Login")
+    serverClient =  gdata.calendar.client.CalendarClient()
+    serverClient.ClientLogin("project3team07@gmail.com", "teamseven", source = "Calendar Access")
+    app = GroupLoginWindow(root, calendarClient, serverClient)
     root.mainloop()
     
 if __name__ == '__main__':

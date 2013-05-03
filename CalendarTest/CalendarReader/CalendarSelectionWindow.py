@@ -134,14 +134,21 @@ class CalendarSelectionWindow(Frame):
 
                 for calEvent in calEventFeed.entry:
                      print (calEvent.title.text)
-#                     eventsFound.append(calEvent)
-#                     print (len(eventsFound))
+#                      c = calEvent.title.text
+#                      calEvent.title.text = "Scooby"
+#                      print (calEvent.title.text)
+#                      print (calEvent.title)
+#                      calEvent.title.text = c
+                     eventsFound.append(calEvent)
+                     print (len(eventsFound))
+                     
+                     CalAccessMethods.modifyEvent(calEvent, "John")
                 print("")
             
+                #make and store 
             
-            
-#             #find group calendar
-#             #group calendar id should be accessed as part of a group; for now, use the following variable
+            #find group calendar
+            #group calendar id should be accessed as part of a group; for now, use the following variable
 #             calendarID=  "pog27t596e2vu8sigfvqnvk59s@group.calendar.google.com"
 #             groupCalendar = gdata.calendar.data.CalendarEntry()
 #             groupCalendar.id = atom.data.Id(text=calendarID)
@@ -169,10 +176,10 @@ def main():
     root.geometry("600x300+300+300")
     #print(root.geometry.)
     myClient = gdata.calendar.client.CalendarClient()
-#     myClient.ClientLogin("projthee@gmail.com", "proj3pass", source = "Bla")
-    myClient.ClientLogin("project3team07@gmail.com", "teamseven", source = "Bla")
-    groupClient =  gdata.calendar.service.CalendarService()
-    groupClient.ClientLogin("project3team07@gmail.com", "teamseven")
+    myClient.ClientLogin("projthee@gmail.com", "proj3pass", source = "Bla")
+#    myClient.ClientLogin("project3team07@gmail.com", "teamseven", source = "Bla")
+    groupClient =  gdata.calendar.client.CalendarClient()
+    groupClient.ClientLogin("project3team07@gmail.com", "teamseven", source = "Calendar Access")
     
     app = CalendarSelectionWindow(root, myClient, groupClient)
     root.mainloop()
