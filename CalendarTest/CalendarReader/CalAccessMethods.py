@@ -45,6 +45,18 @@ def _InsertSubscription(id='python.gcal.test%40gmail.com'):
     calendar.id = atom.data.Id(text=id)
     return calendar
 
+def createNewEvent(eventName, eventStartTime, eventEndTime, eventLocation):
+    #given a name, rudimentary event time information, and a location, make an event
+    newEvent = gdata.calendar.data.CalendarEventEntry()
+    #set title
+    newEvent.title=atom.data.Title(text=eventName)
+    #set time
+    newEvent.when.append(gdata.data.When(start=eventStartTime,end=eventEndTime))
+    #set location
+    newEvent.where.append(gdata.data.Where(value=eventLocation))
+    
+    return newEvent
+
 def modifyEvent(rawEvent, userName):
     '''
     Create a new calendar event identical to rawEvent, except with title "Username Unavailable"
