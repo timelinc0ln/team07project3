@@ -95,7 +95,7 @@ class GroupLoginWindow(Toplevel):
     
     def write_groupData(self, filename):
         with open(filename, 'w') as outfile:
-            json.dump(self.groupData, outfile)        
+            outfile.write(json.dumps(self.groupData, sort_keys=True, indent=2))
             
     def read_userData(self, filename):
         json_data=open(filename)

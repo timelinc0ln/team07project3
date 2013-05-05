@@ -11,6 +11,7 @@ from ttk import *
 import GroupLoginWindow
 import MapWindow
 import webbrowser
+import json
 
 #convert MessageWindow into a class (do later)
 class Window(object):
@@ -46,7 +47,6 @@ class LoginWindow(Toplevel):
     haveLogged = False
     windowHeight = None
     windowWidth = None
-    
 
     def __init__(self, parent):
         Toplevel.__init__(self)
@@ -62,6 +62,7 @@ class LoginWindow(Toplevel):
         #testMessage = Message(self)
         self.userName = StringVar()
         self.userPass = StringVar()
+        self.userEmail = StringVar()
         self.userNamePrompt = Label(self, text="User Name:")
         self.userPassPrompt = Label(self, text="Password:")
         self.userNameEntry = Entry(self, textvariable=self.userName)
@@ -107,16 +108,42 @@ class LoginWindow(Toplevel):
         calendarService.email = self.userName.get()
         calendarService.password = self.userPass.get()
         calendarService.source = 'CalReader' # not really sure what this is
-        try:
-            calendarService.ProgrammaticLogin() #add an if statement or something to catch a bad authentication error;
-            print(self.userName.get())
-            print(self.userPass.get())
-            self.haveLogged = True
-            self.showCalWindow()
-            self.hide()
-            return calendarService
-        except gdata.service.BadAuthentication:
-            print("Bad user name or password.")
+        if self.userExists(self.userName):
+            try:
+                calendarService.ProgrammaticLogin() #add an if statement or something to catch a bad authentication error;
+                print(self.userName.get())
+                print(self.userPass.get())
+                self.haveLogged = True
+                self.showCalWindow()
+                self.hide()
+                return calendarService
+            except gdata.service.BadAuthentication:
+                print("Bad user name or password.")
+        else:
+            print("userName does not exist. Would you like to create a new account?")
+            
+            
+    def userExists(self, userName):
+        #compare the input user name with the existing ones in the data server
+        for Users in self.userData['Users']:
+            if Users['username']==userName:
+                return True
+        return False
+        
+    def read_userData(self, filename):
+        json_data=open(filename)
+        userData=json.load(json_data)
+        self.userData=userData
+        
+    def write_userData(self, filename):
+        with open(filename, 'w') as outfile:
+            outfile.write(json.dumps(self.userData, sort_keys=True, indent=2))
+            
+    def addUser(self, userName, userPassword, emailAccount, emailPassword):
+        self.userData['Users'].append({"username":userName, "userpassword":userPassword,
+                                       "googleid":emailAccount, "googlepass":emailPassword,
+                                       "grouplist":[]})
+        self.write_userData('UserDatabase.json')
             
     def hide(self):
         self.withdraw()     
