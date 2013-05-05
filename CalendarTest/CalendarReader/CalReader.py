@@ -180,7 +180,7 @@ class CalendarWindow(Toplevel):
             self.initUI()  
           
     def openGroupLogin(self, parent, client):
-        groupWindow = GroupLoginWindow.GroupLoginWindow(parent, "bob", client, client)
+        groupWindow = GroupLoginWindow.GroupLoginWindow(parent, self.userName.get(), client, client)
                  
     def initUI(self):
         self.geometry("700x700+100+100")
