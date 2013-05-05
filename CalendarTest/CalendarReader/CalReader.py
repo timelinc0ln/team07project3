@@ -63,10 +63,12 @@ class LoginWindow(Toplevel):
         self.userName = StringVar()
         self.userPass = StringVar()
         self.userEmail = StringVar()
+        self.userEmailPass = StringVar()
         self.userNamePrompt = Label(self, text="User Name:")
         self.userPassPrompt = Label(self, text="Password:")
         self.userNameEntry = Entry(self, textvariable=self.userName)
         self.userPassEntry = Entry(self, textvariable=self.userPass, show="*")
+        self.read_userData('UserDatabase.json')
         
         #set up window theme
         self.title("Login to GroupMeet")
@@ -92,7 +94,12 @@ class LoginWindow(Toplevel):
         if callerType == "Button":
             if callerName == "Submit":
                 print("Submit button pressed")
-                self.client = self.Login()
+                if self.userExists(self.userName.get()):
+                    self.client = self.Login()
+                else:
+                    print("The username does not exist. Would you like to create a new account?")
+                    #pop a new window
+                    
             elif callerName == "Quit":
                 print("Exiting")
                 self.parent.isRunning = False
@@ -104,15 +111,15 @@ class LoginWindow(Toplevel):
      
                 
     def Login(self):
-        calendarService = gdata.calendar.service.CalendarService()
-        calendarService.email = self.userName.get()
-        calendarService.password = self.userPass.get()
-        calendarService.source = 'CalReader' # not really sure what this is
-        if self.userExists(self.userName):
+        if self.accountLoginCheck(self.userName, self.userPass):
             try:
+                calendarService = gdata.calendar.service.CalendarService()
+                calendarService.email = self.userEmail
+                calendarService.password = self.userEmailPass
+                calendarService.source = 'CalReader' # not really sure what this is
                 calendarService.ProgrammaticLogin() #add an if statement or something to catch a bad authentication error;
-                print(self.userName.get())
-                print(self.userPass.get())
+                print(self.userEmail)
+                print(self.userEmailPass)
                 self.haveLogged = True
                 self.showCalWindow()
                 self.hide()
@@ -120,11 +127,12 @@ class LoginWindow(Toplevel):
             except gdata.service.BadAuthentication:
                 print("Bad user name or password.")
         else:
-            print("userName does not exist. Would you like to create a new account?")
+            print("incorrect username or password. Please try again.")
             
             
     def userExists(self, userName):
         #compare the input user name with the existing ones in the data server
+        print("%s", userName)
         for Users in self.userData['Users']:
             if Users['username']==userName:
                 return True
@@ -133,6 +141,8 @@ class LoginWindow(Toplevel):
     def read_userData(self, filename):
         json_data=open(filename)
         userData=json.load(json_data)
+        #userData=json.dumps(userData, ensure_ascii=False)
+        print(userData)
         self.userData=userData
         
     def write_userData(self, filename):
@@ -144,7 +154,21 @@ class LoginWindow(Toplevel):
                                        "googleid":emailAccount, "googlepass":emailPassword,
                                        "grouplist":[]})
         self.write_userData('UserDatabase.json')
-            
+    
+    def accountLoginCheck(self, userName, password):
+        #print("%s", userName.get())
+        #print("%s", password.get())
+        for Users in self.userData['Users']:
+            userNameData=str(Users['username'])
+            userPassData=str(Users['userpassword'])
+            #print("%s", userNameData)
+            #print("%s", userPassData)  
+            if userNameData==userName.get() and userPassData==password.get():
+                self.userEmail=str(Users['googleid'])
+                self.userEmailPass=str(Users['googlepass'])
+                return True
+        return False
+    
     def hide(self):
         self.withdraw()     
         
