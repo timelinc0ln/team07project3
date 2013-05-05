@@ -9,22 +9,22 @@ import gdata.calendar.client
 import gdata.calendar.data
 import datetime
 import CalAccessMethods
+import InvitationWindow
+import CalendarSelectionWindow
 from Tkinter import *
 from ttk import *
 import json
 
 #create a window to allow the user to login to a given group a
-class GroupLoginWindow(Toplevel):
-    #groupdata = None
-    
-    def __init__(self, parent, userName, calendarClient, serverClient):
+class GroupLoginWindow(Toplevel):    
+    def __init__(self, parent, userName, calendarClient, groupClient):
         Toplevel.__init__(self, parent)
         self.parent = parent
         self.windowWidth = parent.winfo_reqwidth()+parent.winfo_x()
         self.windowHeight = parent.winfo_reqheight()
         self.userName = userName
         self.calendarClient = calendarClient
-        self.serverClient = serverClient
+        self.groupClient = groupClient
         self.read_groupData('GroupDatabase.json')
         self.read_userData('UserDatabase.json')
         self.initUI()
@@ -147,12 +147,9 @@ class GroupLoginWindow(Toplevel):
                 else:
                     print ("Invalid registration; please fill all entry fields.")
             #break this down and make it more legible
-            elif callerName == "Login":
-                
-                
+            elif callerName == "Login":          
                 print("Login clicked")
-                if self.allFieldsCompleted(callerName):
-                    
+                if self.allFieldsCompleted(callerName):   
                     groupName = self.existNameString.get()
                     groupPass = self.existPassString.get()
                     if self.groupExists(groupName) == True:
@@ -163,6 +160,8 @@ class GroupLoginWindow(Toplevel):
                             if self.userInGroup(groupName, self.userName) == True:
                                 #pass group information to CalendarWindow
                                 print("Existing user")
+                                calWindow = CalendarSelectionWindow.CalendarSelectionWindow(self.parent, self.calendarClient, self.groupClient)
+                                self.withdraw()
                             else:
                                 #pass group information to CalendarSelectionWindow
                                 print("New user")
@@ -191,11 +190,11 @@ class GroupLoginWindow(Toplevel):
         #create a new calendar on the server account for the group
         calendarDescription = "Calendar for group " + groupName + "."
         groupCalendar = CalAccessMethods.createCalendar(title=groupName, description=calendarDescription)
-        self.serverClient.InsertCalendar(new_calendar=groupCalendar)
+        self.groupClient.InsertCalendar(new_calendar=groupCalendar)
     
     def getGroupCalendarID(self,groupName):
         #get the ID of the group calendar
-        calendar_feed = self.serverClient.GetOwnCalendarsFeed()
+        calendar_feed = self.groupClient.GetOwnCalendarsFeed()
         for calendar_list_entry in calendar_feed.entry:
             if calendar_list_entry.title.text == groupName:
                 return CalAccessMethods.getCalendarID(calendar_list_entry.id.text)
@@ -212,6 +211,9 @@ class GroupLoginWindow(Toplevel):
                                           "calendarId":groupCalendarID, "password":password, 
                                           "members":[{"name":memberName}]})
         self.write_groupData('GroupDatabase.json')
+        #prompt user to add collaborators 
+        addInvites = InvitationWindow.InvitationWindow(self.parent, self.calendarClient, self.groupClient, groupName, password) 
+        self.withdraw() 
         
         return
     
@@ -247,9 +249,9 @@ def main():
     userName = "Spartacus"
     calendarClient =  gdata.calendar.client.CalendarClient()
     calendarClient.ClientLogin("projthee@gmail.com", "proj3pass", source = "User Login")
-    serverClient =  gdata.calendar.client.CalendarClient()
-    serverClient.ClientLogin("project3team07@gmail.com", "teamseven", source = "Calendar Access")
-    app = GroupLoginWindow(root, userName, calendarClient, serverClient)
+    groupClient =  gdata.calendar.client.CalendarClient()
+    groupClient.ClientLogin("project3team07@gmail.com", "teamseven", source = "Calendar Access")
+    app = GroupLoginWindow(root, userName, calendarClient, groupClient)
     root.mainloop()
     
 if __name__ == '__main__':

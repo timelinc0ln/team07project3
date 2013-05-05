@@ -15,35 +15,36 @@ from email import Encoders
 from Tkinter import *
 from ttk import *
 import os
+import CalendarSelectionWindow
 
 
 #create a window to allow the user to login to a given group a
 class InvitationWindow(Toplevel):   # also need to pass in Group username/password
-    groupUsername = "Test" # pass these in later
-    groupPassword = "12345"
-    attachment = "C:\Users\casey\Downloads\GroupMeet.png"
-    subject = "GroupMeet Invitation"
-    message = """Howdy!
-
-            This is an automatic notificaiton that you have been invited to a group on the GroupMeet service.
-
-            Here is the information regarding your new GroupMeet group account:
-
-            Group Username: %s
-            Group Password: %s
-
-            Please save this information for your use. You will need to make a GroupMeet account to access the features of this group.
-
-            Thanks!
-
-            -GroupMeet Development Team""" % (groupUsername, groupPassword) 
-
-    def __init__(self, parent, calendarClient): 
+    def __init__(self, parent, calendarClient, groupClient, username, password): 
         Toplevel.__init__(self, parent)
         self.parent = parent
         self.windowWidth = parent.winfo_reqwidth()+parent.winfo_x()
         self.windowHeight = parent.winfo_reqheight()
         self.calendarClient = calendarClient
+        self.groupClient = groupClient
+        self.groupUsername = username # pass these in later
+        self.groupPassword = password
+        self.attachment = "C:\Users\casey\Downloads\GroupMeet.png"
+        self.subject = "GroupMeet Invitation"
+        self.message = """Howdy!
+
+        This is an automatic notificaiton that you have been invited to a group on the GroupMeet service.
+
+        Here is the information regarding your new GroupMeet group account:
+
+        Group Username: %s
+        Group Password: %s
+
+        Please save this information for your use. You will need to make a GroupMeet account to access the features of this group.
+
+        Thanks!
+
+        -GroupMeet Development Team""" % (self.groupUsername, self.groupPassword)
         self.initUI()
         
     def initUI(self):
@@ -77,9 +78,13 @@ class InvitationWindow(Toplevel):   # also need to pass in Group username/passwo
                 print("Confirm clicked")
                 #email every email address in the list
                 self.sendInvites()
+                calWinodw = CalendarSelectionWindow.CalendarSelectionWindow(self.parent, self.calendarClient, self.groupClient)
+                self.withdraw()
             elif callerName == "Skip":
                 print("Skip clicked")
                 #hide the window, clear self.nameEntryString, show map window
+                calWinodw = CalendarSelectionWindow.CalendarSelectionWindow(self.parent, self.calendarClient, self.groupClient)
+                self.withdraw()
 
     def mail(self, to, subject, text, attach):
         gmail_user = "project3team07@gmail.com"
@@ -114,31 +119,13 @@ class InvitationWindow(Toplevel):   # also need to pass in Group username/passwo
 
         for item in emailAddresses:
             self.mail(item, self.subject, self.message, self.attachment)
-        # SERVER = "smtp-relay.tamu.edu"
-        # FROM = "project3team07@gmail.com"
-        # TO = ["patrickcasey2014@gmail.com"]
-        # SUBJECT = "Here is a test message"
-        # TEXT = "Here is a conformation email."
-        # message = """\
-        # From: %s
-        # To: %s
-        # Subject: %s
-
-        # %s
-        # """ % (FROM, ", ".join(TO), SUBJECT, TEXT)
-        # try:
-        #     server = smtplib.SMTP(SERVER)
-        #     server.sendmail(FROM,TO, message)
-        #     print("Successfully sent email")
-        # except:
-        #     print("Error: unable to send email")
     
 def main():
     
     root = Tk()
     root.geometry("600x155+300+300")
     #print(root.geometry.)
-    app = InvitationWindow(root, gdata.calendar.client.CalendarClient())
+    app = InvitationWindow(root, gdata.calendar.client.CalendarClient(), "Team07", "12345")
     root.mainloop()
 
 if __name__ == '__main__':

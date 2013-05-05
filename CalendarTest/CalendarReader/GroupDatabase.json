@@ -32,6 +32,17 @@
         }
       ], 
       "password": "1"
+    }, 
+    {
+      "calendarId": "3k3e4v2a504cpf3g1ebjs2hnlk%40group.calendar.google.com", 
+      "dateCreated": "2013-05-05T15:44:15", 
+      "groupName": "registertest", 
+      "members": [
+        {
+          "name": "Spartacus"
+        }
+      ], 
+      "password": "123456"
     }
   ]
 }

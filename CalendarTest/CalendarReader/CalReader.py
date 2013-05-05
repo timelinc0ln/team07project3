@@ -9,6 +9,7 @@ import gdata.calendar.client
 from Tkinter import *
 from ttk import *
 import GroupLoginWindow
+import InvitationWindow
 import MapWindow
 import webbrowser
 import json
@@ -32,10 +33,6 @@ class Window(object):
 
     def hide(self):
         self.root.withdraw()
-        
-#     def checkWindows(self):
-#         while self.isRunning == True:
-#             self.openWindow()
     
     def openWindow(self):
         """ Add new window classes here"""
@@ -204,33 +201,6 @@ class CalendarWindow(Toplevel):
         
 class Group():
     None
-#>>>>>>> Reading in a user name
-class Example(Frame):
-    def __init__(self, parent):
-        Frame.__init__(self, parent)
-        self.parent = parent
-        self.initUI()
-    def initUI(self):
-        self.parent.title("window title")
-        self.style = Style()
-        self.style.theme_use("step")
-        self.pack(fill=BOTH, expand = 1)
-        
-        quitButton = Button(self,text="Quit", command=self.quit)
-        quitButton.place(x=350, y=675)
-        v = None
-        
-        m = Message(self, textvariable = v)
-        m.place(x = 25, y = 25)
-        
-        myEntry = Entry(self, textvariable = v)
-        myEntry.place (x = 150, y = 50)
-        
-        p = None
-        
-        printButton = Button(self,text="Print")
-        printButton.place(x = 400, y = 50)
-
        
 def main():
     
