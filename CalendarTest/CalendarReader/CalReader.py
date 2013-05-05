@@ -13,6 +13,11 @@ import InvitationWindow
 import MapWindow
 import webbrowser
 import json
+<<<<<<< HEAD
+=======
+# import java
+
+>>>>>>> Updated login window
 
 #convert MessageWindow into a class (do later)
 class Window(object):
@@ -51,18 +56,16 @@ class LoginWindow(Toplevel):
         self.initUI()
     
     def initUI(self):
-        # setup window size
-        self.geometry("600x200+300+300")
         #define widgets for window
         self.quitButton = Button(self, text="Cancel", command=lambda: self.callBack("Button", "Quit"))
-        submitButton = Button(self, text="Submit", command=lambda: self.callBack("Button", "Submit"))
+        self.submitButton = Button(self, text="Submit", command=lambda: self.callBack("Button", "Submit"))
         #testMessage = Message(self)
         self.userName = StringVar()
         self.userPass = StringVar()
         self.userEmail = StringVar()
         self.userEmailPass = StringVar()
-        self.userNamePrompt = Label(self, text="User Name:")
-        self.userPassPrompt = Label(self, text="Password:")
+        self.userNamePrompt = Label(self, text="User Name:", background="lightgray")
+        self.userPassPrompt = Label(self, text="Password:", background="lightgray")
         self.userNameEntry = Entry(self, textvariable=self.userName)
         self.userPassEntry = Entry(self, textvariable=self.userPass, show="*")
         self.read_userData('UserDatabase.json')
@@ -71,15 +74,16 @@ class LoginWindow(Toplevel):
         self.title("Login to GroupMeet")
         self.style = Style()
         self.style.theme_use("clam")
+        self.configure(background="lightgray")
         # self.pack(fill=BOTH, expand = 1)
         
         #place widgets
-        self.userNamePrompt.place(x=0, y=25)
-        self.userNameEntry.place(x=80, y=25)
-        self.userPassPrompt.place(x=260, y=25)
-        self.userPassEntry.place(x=335, y=25)
-        submitButton.place(x=80, y=80)
-        self.quitButton.place(x=180, y=80)
+        self.userNamePrompt.grid(row=0, column=0, padx=5, pady=10, sticky=E+W)
+        self.userNameEntry.grid(row=0, column=1, padx=5, pady=10, sticky=E+W)
+        self.userPassPrompt.grid(row=0, column=2,padx=5,pady=10,sticky=E+W)
+        self.userPassEntry.grid(row=0,column=3, padx=5, pady=10, sticky=E+W)
+        self.submitButton.grid(row=1,column=2, columnspan=2, padx=5, pady= 5, sticky=W)
+        self.quitButton.grid(row=1,column=3, padx=5, pady=5, sticky=E)
         
     def onClose(self):
         self.destroy()
