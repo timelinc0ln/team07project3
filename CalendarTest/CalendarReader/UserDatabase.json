@@ -37,6 +37,17 @@
       "grouplist": [], 
       "username": "pat101", 
       "userpassword": "1234"
+    }, 
+    {
+      "googleid": "patrickcasey2014@gmail.com", 
+      "googlepass": "extremetimelinc0lnmeatball", 
+      "grouplist": [
+        {
+          "groupname": "Group Awesome"
+        }
+      ], 
+      "username": "new1", 
+      "userpassword": "asdf"
     }
   ]
 }

@@ -88,9 +88,9 @@ class NewUserWindow(Toplevel):
                 #if account was created, login to client, store it for access by other windows
                 self.client = self.loginClient()
                 #login to service
-                self.groupClient = loginGroup()
+                self.groupClient = self.loginGroup()
                 #check that the account creation was successful
-                if accountMade = True:
+                if accountMade == True:
                     groupLogin = GroupLoginWindow.GroupLoginWindow(self.parent, self.userNameString.get(), self.client, self.groupClient)
             elif callerName == "Cancel":
                 print("Cancel clicked")

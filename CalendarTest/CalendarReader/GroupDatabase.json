@@ -87,6 +87,17 @@
         }
       ], 
       "password": "pass"
+    }, 
+    {
+      "calendarId": "55vb1spt8aum0scvb6db4dn7sc%40group.calendar.google.com", 
+      "dateCreated": "2013-05-05T17:41:47", 
+      "groupName": "Group Awesome", 
+      "members": [
+        {
+          "name": "new1"
+        }
+      ], 
+      "password": "123"
     }
   ]
 }
