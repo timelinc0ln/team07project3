@@ -10,6 +10,7 @@ from Tkinter import *
 from ttk import *
 import GroupLoginWindow
 import InvitationWindow
+import NewUserWindow
 import MapWindow
 import webbrowser
 import json
@@ -94,7 +95,9 @@ class LoginWindow(Toplevel):
                     self.client = self.Login()
                 else:
                     print("The username does not exist. Would you like to create a new account?")
-                    #pop a new window
+                    #pop a newUser window
+                    newUser = NewUserWindow.NewUserWindow(self.parent, 'UserDatabase.json')
+                    self.withdraw()
                     
             elif callerName == "Quit":
                 print("Exiting")

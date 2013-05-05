@@ -7,6 +7,7 @@ import gdata.docs.service
 import gdata.calendar.service
 import gdata.calendar.client
 import json
+import GroupLoginWindow
 from Tkinter import *
 from ttk import *
 
@@ -86,9 +87,15 @@ class NewUserWindow(Toplevel):
                 accountMade = self.createAccount()
                 #if account was created, login to client, store it for access by other windows
                 self.client = self.loginClient()
+                #login to service
+                self.groupClient = loginGroup()
+                #check that the account creation was successful
+                if accountMade = True:
+                    groupLogin = GroupLoginWindow.GroupLoginWindow(self.parent, self.userNameString.get(), self.client, self.groupClient)
             elif callerName == "Cancel":
                 print("Cancel clicked")
                 #hide the window, clear self.nameEntryString, show map window
+                self.withdraw()
 
     def createAccount(self):
         #make sure all entries have been filled
@@ -183,7 +190,15 @@ class NewUserWindow(Toplevel):
         password = self.googlePassString.get()
         source = 'GroupMeet' 
         client.ClientLogin(email, password, source) 
-        return client
+        return client\
+
+    def loginGroup(self):
+        groupClient = gdata.calendar.client.CalendarClient()
+        email = "project3team07@gmail.com"
+        password = "teamseven"
+        source = 'GroupMeet'
+        groupClient.ClientLogin(email, password, source)
+        return groupClient
         
 
 def main():

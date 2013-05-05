@@ -30,6 +30,13 @@
       ], 
       "username": "test", 
       "userpassword": "test"
+    }, 
+    {
+      "googleid": "project3team07@gmail.com", 
+      "googlepass": "teamseven", 
+      "grouplist": [], 
+      "username": "pat101", 
+      "userpassword": "1234"
     }
   ]
 }
