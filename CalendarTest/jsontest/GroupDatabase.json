@@ -1,0 +1,37 @@
+{
+  "Groups": [
+    {
+      "calendarId": "Empty for now", 
+      "dateCreated": "4/26/2013", 
+      "groupName": "Group 1", 
+      "members": [
+        {
+          "name": "Will"
+        }
+      ], 
+      "password": "1234"
+    }, 
+    {
+      "calendarId": "Empty for now", 
+      "dateCreated": "1/17/2012", 
+      "groupName": "Group 2", 
+      "members": [
+        {
+          "name": "John"
+        }
+      ], 
+      "password": "4321"
+    }, 
+    {
+      "calendarId": "hc81lnfmc9f4av8q58g48ns404%40group.calendar.google.com", 
+      "dateCreated": "2013-05-04T20:38:38", 
+      "groupName": "project3team07", 
+      "members": [
+        {
+          "name": "Spartacus"
+        }
+      ], 
+      "password": "1"
+    }
+  ]
+}

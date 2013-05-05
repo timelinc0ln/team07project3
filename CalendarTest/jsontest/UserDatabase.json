@@ -1,0 +1,32 @@
+{
+  "Users": [
+    {
+      "googleid": "project3team07@gmail.com", 
+      "googlepass": "teamseven", 
+      "grouplist": [
+        {
+          "groupname": "Group 1"
+        }, 
+        {
+          "groupname": "Group 2"
+        }
+      ], 
+      "username": "johnny112", 
+      "userpassword": "applejacks"
+    }, 
+    {
+      "googleid": "projthee@gmail.com", 
+      "googlepass": "proj3pass", 
+      "group list": [], 
+      "username": "test", 
+      "userpassword": "test"
+    }, 
+    {
+      "googleid": "123", 
+      "googlepass": "123", 
+      "grouplist": [], 
+      "username": "123", 
+      "userpassword": "123"
+    }
+  ]
+}
