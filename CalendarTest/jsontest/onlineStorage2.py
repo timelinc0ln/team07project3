@@ -20,5 +20,6 @@ userData['Users'].append({"username":"123", "userpassword":"123",
         
 with open('UserDatabase.json', 'w') as outfile:
     outfile.write(json.dumps(userData, sort_keys=True, indent=2))
-
-outfile.sync()
+gitoutfile=gitshelve.open('UserDatabase.json', 'w')
+#gitoutfile.commit()
+gitoutfile.sync()
