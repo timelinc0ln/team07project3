@@ -101,7 +101,8 @@ class GroupLoginWindow(Toplevel):
         json_data=open(filename)
         userData=json.load(json_data)
         self.userData=userData
-    
+        
+        
     def allFieldsCompleted(self, callerName):
         if callerName == "Register":
             if self.newNameString.get() == "":

@@ -22,8 +22,8 @@ class NewUserWindow(Toplevel):
 #     existPassString = None
     
     
-    def __init__(self, parent):
-        Toplevel.__init__(self, parent, filename)
+    def __init__(self, parent, filename):
+        Toplevel.__init__(self, parent)
         self.parent = parent
         self.read_userData(filename)
         self.initUI()
@@ -49,7 +49,7 @@ class NewUserWindow(Toplevel):
         self.googlePassEntry = Entry(self, textvariable = self.googlePassString, width=30, show="*")
         
         self.confirmButton = Button(self, text="Confirm", command=lambda: self.callBack("Button","Confirm"))
-        self.cancelButton = Button(self, text="Skip", command=lambda: self.callBack("Button","Cancel"))
+        self.cancelButton = Button(self, text="Cancel", command=lambda: self.callBack("Button","Cancel"))
         
         #design window
         self.title("Register New Account")
@@ -81,6 +81,10 @@ class NewUserWindow(Toplevel):
         json_data=open(filename)
         userData=json.load(json_data)
         self.userData=userData    
+        
+    def write_userData(self, filename):
+        with open(filename, 'w') as outfile:
+            outfile.write(json.dumps(self.userData, sort_keys=True, indent=2))
     
     def callBack(self, callerType, callerName):
         #Buttons
@@ -88,7 +92,9 @@ class NewUserWindow(Toplevel):
             if callerName == "Confirm":
                 print("Confirm clicked")
                 #attempt to create new account
-                
+                accountMade = self.createAccount()
+                #if account was created, login to client, store it for access by other windows
+                self.client = self.loginClient()
             elif callerName == "Cancel":
                 print("Cancel clicked")
                 #hide the window, clear self.nameEntryString, show map window
@@ -96,37 +102,47 @@ class NewUserWindow(Toplevel):
     def createAccount(self):
         #make sure all entries have been filled
         allEntriesFilled = self.checkFields()
+        print (allEntriesFilled)
         #make sure name is available
         nameAvailable = self.userNameAvailable()
+        print (nameAvailable)
         #make sure passwords match
         matchingPasswords = self.passwordsMatch()
+        print (matchingPasswords)
         #make sure google information is valid
         validGoogleAccount = self.validGoogleInformation()
+        print (validGoogleAccount)
         #make sure user does not already have an account
         googleAccountNotInUse = self.emailNotInUse()
+        print(googleAccountNotInUse)
         #create new account
         if allEntriesFilled and nameAvailable and matchingPasswords and validGoogleAccount and googleAccountNotInUse:
             self.makeAccount()
+            return True
         else:
             print ("Account creation failed.")
+            return False
         
 
     def checkFields(self):
         #return false if any entry is empty
-        if self.userNameString.get == "":
+        if self.userNameString.get() == "":
             return False
-        if self.userPassString.get == "":
+        if self.userPassString.get() == "":
             return False
-        if self.userConfirmString.get == "":
+        if self.userConfirmString.get() == "":
             return False
-        if self.googleLoginString.get == "":
+        if self.googleLoginString.get() == "":
             return False
-        if self.googleLoginString.get == "":
+        if self.googlePassString.get() == "":
             return False
         return True
     
     def userNameAvailable(self):
         #return false if user name is taken
+        for Users in self.userData["Users"]:
+            if Users["username"]==self.userNameString.get():
+                return False
         return True
     
     def passwordsMatch(self):
@@ -140,24 +156,45 @@ class NewUserWindow(Toplevel):
     
     def validGoogleInformation(self):
         #attempt to log in to google with the given information; if it doesnt work return false, else return true
-        calendarService = gdata.calendar.client.CalendarClient()
-        calendarService.email = self.userName.get()
-        calendarService.password = self.userPass.get()
-        calendarService.source = 'CalReader' # not really sure what this is
+        client = gdata.calendar.client.CalendarClient()
+        email = self.googleLoginString.get()
+        password = self.googlePassString.get()
+        source = 'GroupMeet'
         try:
-            calendarService.ProgrammaticLogin() #add an if statement or something to catch a bad authentication error;
-        except gdata.service.BadAuthentication:
+            client.ClientLogin(email, password, source) 
+        except gdata.client.BadAuthentication:
             return False
         return True
     
     def emailNotInUse(self):
         #compare the google login information with all stored login information; if account is in use, return false, else return true
+        for Users in self.userData["Users"]:
+            if Users['googleid']==self.googleLoginString.get():
+                return False
         return True
     
     def makeAccount(self):
         #add new account to user database
+        userName = self.userNameString.get()
+        userPass = self.userPassString.get()
+        googleID = self.googleLoginString.get()
+        googlePass = self.googlePassString.get()
+        
+        self.userData['Users'].append({"username":userName, "userpassword":userPass,
+                                          "googleid":googleID, "googlepass":googlePass, 
+                                          "grouplist":[]})
+        self.write_userData('UserDatabase.json')
         return
         
+    def loginClient(self):
+        client = gdata.calendar.client.CalendarClient()
+        email= self.googleLoginString.get()
+        password = self.googlePassString.get()
+        source = 'GroupMeet' 
+        client.ClientLogin(email, password, source) 
+        return client
+        
+
 def main():
     
     root = Tk()
