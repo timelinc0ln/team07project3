@@ -1,31 +1,35 @@
 {
-	"Users": [
-	{
-		"username": "johnny112",
-		"userpassword":"applejacks", 
-		"googleid": "project3team07@gmail.com",
-		"googlepass": "teamseven", 
-		"grouplist": [{"groupname": "Group 1"}, {"groupname": "Group 2"}] 
-	},
+  "Users": [
+    {
+      "googleid": "johnny112@gmail.com", 
+      "googlepass": "password112", 
+      "grouplist": [
         {
-	       "username": "test",
-	       "userpassword":"test",
-	       "googleid":"projthee@gmail.com",
-	       "googlepass": "proj3pass",
-	       "group list": []
-	}
-	]
+          "groupname": "Group 1"
+        }, 
+        {
+          "groupname": "Group 2"
+        }, 
+        {
+          "groupname": "anothergroup"
+        }, 
+        {
+          "groupname": "group22"
+        }
+      ], 
+      "username": "johnny112", 
+      "userpassword": "applejacks"
+    }, 
+    {
+      "googleid": "projthee@gmail.com", 
+      "googlepass": "proj3pass", 
+      "grouplist": [
+        {
+          "groupname": "group22"
+        }
+      ], 
+      "username": "test", 
+      "userpassword": "test"
+    }
+  ]
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

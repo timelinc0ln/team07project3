@@ -13,8 +13,6 @@ import InvitationWindow
 import MapWindow
 import webbrowser
 import json
-import java
-
 
 #convert MessageWindow into a class (do later)
 class Window(object):

@@ -10,11 +10,13 @@ import gdata.calendar.data
 import datetime
 import CalAccessMethods
 import InvitationWindow
+import CalReader
 import CalendarSelectionWindow
 from Tkinter import *
 from ttk import *
 import json
-
+# User logs in to group they are not a part of
+# new group is registered- added to user's list of groups
 #create a window to allow the user to login to a given group a
 class GroupLoginWindow(Toplevel):    
     def __init__(self, parent, userName, calendarClient, groupClient):
@@ -101,7 +103,10 @@ class GroupLoginWindow(Toplevel):
         json_data=open(filename)
         userData=json.load(json_data)
         self.userData=userData
-        
+
+    def write_userData(self, filename):
+        with open(filename, 'w') as outfile:
+            outfile.write(json.dumps(self.userData, sort_keys = True, indent = 2))   
         
     def allFieldsCompleted(self, callerName):
         if callerName == "Register":
@@ -160,18 +165,21 @@ class GroupLoginWindow(Toplevel):
                             if self.userInGroup(groupName, self.userName) == True:
                                 #pass group information to CalendarWindow
                                 print("Existing user")
-                                calWindow = CalendarSelectionWindow.CalendarSelectionWindow(self.parent, self.calendarClient, self.groupClient)
+                                calWindow = CalReader.CalendarWindow(self.parent, self.calendarClient)
+                                #calWindow = CalendarSelectionWindow.CalendarSelectionWindow(self.parent, self.calendarClient, self.groupClient)
                                 self.withdraw()
                             else:
                                 #pass group information to CalendarSelectionWindow
                                 print("New user")
+                                self.updateUserJson(groupName, self.userName)
+                                calWindow = CalendarSelectionWindow.CalendarSelectionWindow(self.parent, self.calendarClient, self.groupClient)
+                                self.withdraw()
                         else:
                             print("Incorrect Password. Login Failed.")
                     else:
                         print ("Group does not exist. Please enter the name of a valid group!")
                 else:
-                    print ("Invalid login; please fill all entry fields.")
-                        
+                    print ("Invalid login; please fill all entry fields.")                        
        
     def confirmPassword (self, password, confirmPassword):
         #compare password and confirmPassword; if they match, return True, else return false
@@ -211,12 +219,21 @@ class GroupLoginWindow(Toplevel):
                                           "calendarId":groupCalendarID, "password":password, 
                                           "members":[{"name":memberName}]})
         self.write_groupData('GroupDatabase.json')
+        #add group name to user's list of groups
+        self.updateUserJson(groupName, memberName)
+
         #prompt user to add collaborators 
         addInvites = InvitationWindow.InvitationWindow(self.parent, self.calendarClient, self.groupClient, groupName, password) 
         self.withdraw() 
         
         return
     
+    def updateUserJson(self, groupName, memberName):
+        for Users in self.userData['Users']:
+            if Users['username']==memberName:
+                Users["grouplist"].append({"groupname":groupName})
+        self.write_userData('UserDatabase.json')
+
     def userInGroup(self, groupName, userName):
         #determine whether userName is in group groupName
         for Groups in self.groupData['Groups']:
@@ -238,8 +255,6 @@ class GroupLoginWindow(Toplevel):
                 else:
                     return False
         return False
-
-
         
 def main():
     
