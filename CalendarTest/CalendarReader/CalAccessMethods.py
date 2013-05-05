@@ -52,9 +52,10 @@ def modifyEvent(rawEvent, userName):
     newEvent = gdata.calendar.data.CalendarEntry()
     
     newEvent.title = userName + " Unavailable"
-    newEvent.quick_add = rawEvent.quick_add
-    newEvent.send_event_notifications = rawEvent.send_event_notifications
-    newEvent.sync_event = rawEvent.sync_event
+    newEvent.when = rawEvent.when
+#     newEvent.quick_add = rawEvent.quick_add
+#     newEvent.send_event_notifications = rawEvent.send_event_notifications
+#     newEvent.sync_event = rawEvent.sync_event
     
     
     '''
@@ -80,10 +81,24 @@ def modifyEvent(rawEvent, userName):
     original_event = gdata.data.OriginalEvent
     reminder = [gdata.data.Reminder]
     '''
-    
-    print(newEvent)
+    print(newEvent.title)
+    for time in newEvent.when:
+        print("Event time")
+        print(time.start)
+        print(time.end)
+        print("")
+        
+
+#     print(newEvent.when)
     print("")
-    print(rawEvent)
+    
+    print(rawEvent.title)
+    for time in rawEvent.when:
+        print("Event time")
+        print(time.start)
+        print(time.end)
+        print("")
+#     print(rawEvent.when)
   
   
 def getTime():

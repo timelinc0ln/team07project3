@@ -184,16 +184,22 @@ class CalendarWindow(Toplevel):
             self.initUI()  
           
     def openGroupLogin(self, parent, client):
-        groupWindow = GroupLoginWindow.GroupLoginWindow(parent, client)
+        groupWindow = GroupLoginWindow.GroupLoginWindow(parent, "bob", client, client)
                  
     def initUI(self):
         self.geometry("700x700+100+100")
         self.title("Calendar Window")
-        loginButton = Button(self, text = 'Login', command =lambda: self.openGroupLogin(self.parent, self.client)).pack(side = BOTTOM)
+        loginButton = Button(self, text = 'Login', command=lambda: self.callBack("Button", "Login")).pack(side = BOTTOM)
         self.newHeader = Label(self, text = "Instructions:")
-        
         self.newHeader.grid(row=0, column=0, columnspan=2, pady=5)
                
+               
+    def callBack(self, callerType, callerName):
+        if callerType == "Button":
+            if callerName == "Login":
+                print("Login button pressed")
+                self.openGroupLogin(self.parent, self.client)
+        
 class Group():
     None
 #>>>>>>> Reading in a user name
