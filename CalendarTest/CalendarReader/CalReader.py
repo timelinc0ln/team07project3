@@ -13,11 +13,6 @@ import InvitationWindow
 import MapWindow
 import webbrowser
 import json
-<<<<<<< HEAD
-=======
-# import java
-
->>>>>>> Updated login window
 
 #convert MessageWindow into a class (do later)
 class Window(object):
