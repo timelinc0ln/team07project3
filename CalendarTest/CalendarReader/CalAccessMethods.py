@@ -49,38 +49,41 @@ def modifyEvent(rawEvent, userName):
     '''
     Create a new calendar event identical to rawEvent, except with title "Username Unavailable"
     '''
-    newEvent = gdata.calendar.data.CalendarEntry()
-    
-    newEvent.title = userName + " Unavailable"
-    newEvent.when = rawEvent.when
-#     newEvent.quick_add = rawEvent.quick_add
-#     newEvent.send_event_notifications = rawEvent.send_event_notifications
-#     newEvent.sync_event = rawEvent.sync_event
-    
-    
-    '''
-    anyone_can_add_self = anyone_can_add_self
-    extended_property = [CalendarExtendedProperty]
-    sequence = SequenceNumberProperty
-    guests_can_invite_others = GuestsCanInviteOthersProperty
-    guests_can_modify = GuestsCanModifyProperty
-    guests_can_see_guests = GuestsCanSeeGuestsProperty
-    georss_where = gdata.geo.data.GeoRssWhere
-    private_copy = rawEvent.private_copy
-    suppress_reply_notifications = SuppressReplyNotificationsProperty
-    uid = IcalUIDProperty
-    where = [gdata.data.Where]
-    when = [When]
-    who = [gdata.data.Who]
-    transparency = gdata.data.Transparency
-    comments = gdata.data.Comments
-    event_status = gdata.data.EventStatus
-    visibility = gdata.data.Visibility
-    recurrence = gdata.data.Recurrence
-    recurrence_exception = [gdata.data.RecurrenceException]
-    original_event = gdata.data.OriginalEvent
-    reminder = [gdata.data.Reminder]
-    '''
+    newEvent = gdata.calendar.data.CalendarEventEntry()
+    eventTitle = userName + " Unavailable"
+    newEvent.title = atom.data.Title(text=eventTitle)
+    #copy a recurring event
+    if rawEvent.recurrence is not None:
+        print (rawEvent.recurrence.text)
+        newEvent.recurrence = gdata.data.Recurrence(text=rawEvent.recurrence.text)
+    else:
+        if len(rawEvent.when) != 0:
+            print ("we have a time")
+            print("starting time")
+            start_time = rawEvent.when[0].start
+            print(start_time)
+            print("ending time")
+            end_time = rawEvent.when[0].end
+            print(end_time)
+            print("adding time")
+            newEvent.when.append(gdata.data.When(start=start_time, end=end_time))
+#     event.content = atom.data.Content(text=content)
+#     event.where.append(gdata.data.Where(value=where))
+# 
+#     if recurrence_data is not None:
+#       # Set a recurring event
+#       event.recurrence = gdata.data.Recurrence(text=recurrence_data)
+#     else:
+#       if start_time is None:
+#         # Use current time for the start_time and have the event last 1 hour
+#         start_time = time.strftime('%Y-%m-%dT%H:%M:%S.000Z', time.gmtime())
+#         end_time = time.strftime('%Y-%m-%dT%H:%M:%S.000Z',
+#             time.gmtime(time.time() + 3600))
+#       event.when.append(gdata.data.When(start=start_time,
+#           end=end_time))
+#     "
+#     newEvent.when = rawEvent.when
+
     print(newEvent.title)
     for time in newEvent.when:
         print("Event time")
@@ -99,7 +102,7 @@ def modifyEvent(rawEvent, userName):
         print(time.end)
         print("")
 #     print(rawEvent.when)
-  
+    return newEvent
   
 def getTime():
     now = datetime.datetime.now()

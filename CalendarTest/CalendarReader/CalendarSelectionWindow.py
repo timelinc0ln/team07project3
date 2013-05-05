@@ -75,7 +75,11 @@ class CalendarSelectionWindow(Frame):
                 self.deselectCalendar()
             elif callerName == "Next":
                 print ("Next Button pressed")
+                #update the group calendar with events from the selected calendar
                 self.updateGroupCalendar()
+                #subscribe the user to the group calendar
+                self.subscribeUser()
+                #hide the window
        
     def seedCalendarList(self):
         #insert calendar names into userCalendars
@@ -106,7 +110,7 @@ class CalendarSelectionWindow(Frame):
     
     def updateGroupCalendar(self):
         #add all events from calendars listed in selectedCalendars to the Group Calendar
-        #NOT WORKING YET
+        #NOT WORKING YET; modify to take in a calendar id and a username
         
         #find calendars listed in selectedCalendars
         calendar_feed = self.calendarClient.GetOwnCalendarsFeed()
@@ -124,6 +128,7 @@ class CalendarSelectionWindow(Frame):
             #print (calendarsToAccess[0])
             #print(self.calendarClient.GetCalendarEventFeed(calendar=calendarsToAccess[0]))
             eventsFound = []
+            eventsToAdd = []
             for cal in calendarsToAccess:
                 print(cal.title.text)
                 #get actual calendar id from calendar uri
@@ -133,26 +138,35 @@ class CalendarSelectionWindow(Frame):
                 calEventFeed = self.calendarClient.GetCalendarEventFeed(uri=calEventFeedUri)
 
                 for calEvent in calEventFeed.entry:
-                     print (calEvent.title.text)
-#                      c = calEvent.title.text
-#                      calEvent.title.text = "Scooby"
-#                      print (calEvent.title.text)
-#                      print (calEvent.title)
-#                      calEvent.title.text = c
+                     #print (calEvent.title.text)
+                     #print (calEvent.when)
                      eventsFound.append(calEvent)
-                     print (len(eventsFound))
+                     #print (len(eventsFound))
                      
-                     CalAccessMethods.modifyEvent(calEvent, "John")
+#                      CalAccessMethods.modifyEvent(calEvent, "John")
+                     newEvent = gdata.calendar.data.CalendarEventEntry()
+                     newEvent = CalAccessMethods.modifyEvent(calEvent, "John")
+                     #if it blows up here we haven't made events correctly yet
+                     print(newEvent)
+                     print("We made an event!")
+                     eventsToAdd.append(newEvent)
+#                      eventsToAdd.append(CalAccessMethods.modifyEvent(calEvent, "John"))
                 print("")
             
                 #make and store 
             
             #find group calendar
             #group calendar id should be accessed as part of a group; for now, use the following variable
-#             calendarID=  "pog27t596e2vu8sigfvqnvk59s@group.calendar.google.com"
-#             groupCalendar = gdata.calendar.data.CalendarEntry()
-#             groupCalendar.id = atom.data.Id(text=calendarID)
-#             print(groupCalendar)
+            calendarID=  "n3e76680gcabna20da1gaktg34%40group.calendar.google.com"
+            groupCalendar = None
+            
+            server_calendar_feed = self.groupClient.GetOwnCalendarsFeed()
+            for server_calendar in server_calendar_feed.entry:
+                server_calendar_id = CalAccessMethods.getCalendarID(server_calendar.id.text)
+                if server_calendar_id == calendarID:
+                    groupCalendar = server_calendar
+                    
+            print(groupCalendar)
             
             #get each event in calendarsToAccess and add a duplicate event to groupCalendar
 #             for cal in calendarsToAccess:
@@ -161,15 +175,41 @@ class CalendarSelectionWindow(Frame):
                 
 #                 print (currentCalendar)
 #                 events = self.calendarClient.GetCalendarEventFeed(currentCalendar)
-        
-        
-           
-        
+            for event in eventsToAdd:
+                groupCalendarEventFeedUri = self.groupClient.GetCalendarEventFeedUri(calendarID)
+                groupCalendarEventFeed = self.calendarClient.GetCalendarEventFeed(uri=groupCalendarEventFeedUri)
+                print("Attempting to add event to calendar")
+                self.groupClient.InsertEvent(new_event=event,insert_uri=groupCalendarEventFeedUri)
+                
+
         #self.quit()
         else:
             print("No calendars have been selected. Select a calendar to add before moving on.")
         return
+      
+    def subscribeUser(self):
+        #subscribe the user to the given calendar
+        #get calendar from group calendar ID
+        groupCalendarID=  "n3e76680gcabna20da1gaktg34%40group.calendar.google.com"
+        groupCalendar = gdata.calendar.data.CalendarEntry()
+            
+        calendarFeed = self.groupClient.GetOwnCalendarsFeed()
+        for calendar in calendarFeed.entry:
+            calendarID= CalAccessMethods.getCalendarID(calendar.id.text)
+            if  groupCalendarID == calendarID:
+                groupCalendar = calendar
         
+        #subscribe user to calendar
+        print("Attempting to subscribe to calendar")
+        self.calendarClient.InsertCalendarSubscription(groupCalendar)
+        print("Calendar subscription successfull!")
+#           print 'Subscribing to the calendar with ID: %s' % id
+#           calendar = gdata.calendar.data.CalendarEntry()
+#           calendar.id = atom.data.Id(text=id)
+#           returned_calendar = self.cal_client.InsertCalendarSubscription(calendar)
+#           return returned_calendar
+        return  
+      
 def main():
     
     root = Tk()
