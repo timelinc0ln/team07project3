@@ -6,22 +6,39 @@ Created on Apr 25, 2013
 import gdata.docs.service
 import gdata.calendar.service
 import gdata.calendar.client
+import smtplib
+from email.MIMEBase import MIMEBase
+from email.MIMEText import MIMEText
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email import Encoders
 from Tkinter import *
 from ttk import *
+import os
 
 
 #create a window to allow the user to login to a given group a
-class InvitationWindow(Toplevel):
-    #windowHeight = None
-   # windowWidth = None
-#     newNameString = None
-#     newPassString = None
-#     newConfirmString = None
-#     existNameString = None
-#     existPassString = None
-    
-    
-    def __init__(self, parent, calendarClient):
+class InvitationWindow(Toplevel):   # also need to pass in Group username/password
+    groupUsername = "Test" # pass these in later
+    groupPassword = "12345"
+    attachment = "C:\Users\casey\Downloads\GroupMeet.png"
+    subject = "GroupMeet Invitation"
+    message = """Howdy!
+
+            This is an automatic notificaiton that you have been invited to a group on the GroupMeet service.
+
+            Here is the information regarding your new GroupMeet group account:
+
+            Group Username: %s
+            Group Password: %s
+
+            Please save this information for your use. You will need to make a GroupMeet account to access the features of this group.
+
+            Thanks!
+
+            -GroupMeet Development Team""" % (groupUsername, groupPassword) 
+
+    def __init__(self, parent, calendarClient): 
         Toplevel.__init__(self, parent)
         self.parent = parent
         self.windowWidth = parent.winfo_reqwidth()+parent.winfo_x()
@@ -64,12 +81,58 @@ class InvitationWindow(Toplevel):
                 print("Skip clicked")
                 #hide the window, clear self.nameEntryString, show map window
 
+    def mail(self, to, subject, text, attach):
+        gmail_user = "project3team07@gmail.com"
+        gmail_pwd = "teamseven"
+        msg = MIMEMultipart()
+
+        msg['From'] = gmail_user
+        msg['To'] = to
+        msg['Subject'] = subject
+
+        msg.attach(MIMEText(text))
+
+        part = MIMEBase('application', 'octet-stream')
+        part.set_payload(open(attach, 'rb').read())
+        Encoders.encode_base64(part)
+        part.add_header('Content-Disposition',
+               'attachment; filename="%s"' % os.path.basename(attach))
+        msg.attach(part)
+
+        mailServer = smtplib.SMTP("smtp.gmail.com", 587)
+        mailServer.ehlo()
+        mailServer.starttls()
+        mailServer.ehlo()
+        mailServer.login(gmail_user, gmail_pwd)
+        mailServer.sendmail(gmail_user, to, msg.as_string())
+        mailServer.close()
+
     def sendInvites(self):
-        #store email addresses found in emailEntryString
         rawEmailInfo = self.emailEntryString.get()
         emailAddresses = rawEmailInfo.split(",", )
-        print (emailAddresses)
-        
+        #print (emailAddresses)
+
+        for item in emailAddresses:
+            self.mail(item, self.subject, self.message, self.attachment)
+        # SERVER = "smtp-relay.tamu.edu"
+        # FROM = "project3team07@gmail.com"
+        # TO = ["patrickcasey2014@gmail.com"]
+        # SUBJECT = "Here is a test message"
+        # TEXT = "Here is a conformation email."
+        # message = """\
+        # From: %s
+        # To: %s
+        # Subject: %s
+
+        # %s
+        # """ % (FROM, ", ".join(TO), SUBJECT, TEXT)
+        # try:
+        #     server = smtplib.SMTP(SERVER)
+        #     server.sendmail(FROM,TO, message)
+        #     print("Successfully sent email")
+        # except:
+        #     print("Error: unable to send email")
+    
 def main():
     
     root = Tk()
@@ -77,7 +140,7 @@ def main():
     #print(root.geometry.)
     app = InvitationWindow(root, gdata.calendar.client.CalendarClient())
     root.mainloop()
-    
+
 if __name__ == '__main__':
     main()
 
