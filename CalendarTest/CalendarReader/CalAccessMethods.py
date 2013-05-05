@@ -37,6 +37,7 @@ def createCalendar(title='New Calendar', description='No Description',
 
     return calendar
 
+
 def _InsertSubscription(id='python.gcal.test%40gmail.com'):
     """Subscribes to the calendar with the specified ID."""
     print 'Subscribing to the calendar with ID: %s' % id
@@ -50,7 +51,7 @@ def modifyEvent(rawEvent, userName):
     '''
     newEvent = gdata.calendar.data.CalendarEntry()
     
-    newEvent.title = userName + " Busy"
+    newEvent.title = userName + " Unavailable"
     newEvent.quick_add = rawEvent.quick_add
     newEvent.send_event_notifications = rawEvent.send_event_notifications
     newEvent.sync_event = rawEvent.sync_event
