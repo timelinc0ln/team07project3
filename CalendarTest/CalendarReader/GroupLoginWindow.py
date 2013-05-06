@@ -10,6 +10,7 @@ import gdata.calendar.data
 import datetime
 import CalAccessMethods
 import InvitationWindow
+import CalendarWindow
 import CalReader
 import CalendarSelectionWindow
 from Tkinter import *
@@ -165,7 +166,7 @@ class GroupLoginWindow(Toplevel):
                             if self.userInGroup(groupName, self.userName) == True:
                                 #pass group information to CalendarWindow
                                 print("Existing user")
-                                calWindow = CalReader.CalendarWindow(self.parent, self.calendarClient)
+                                calWindow = CalendarWindow.CalendarWindow(self.parent, self.calendarClient, groupName)
                                 #calWindow = CalendarSelectionWindow.CalendarSelectionWindow(self.parent, self.calendarClient, self.groupClient)
                                 self.withdraw()
                             else:
@@ -243,7 +244,11 @@ class GroupLoginWindow(Toplevel):
                         return True
         return False
     
-    
+    # def showCalWindow(self):
+    #     groupName = self.existNameString.get()
+    #     self.CalendarID = self.getGroupCalendarID(groupName)
+    #     calWindow = CalendarWindow.CalendarWindow(self.parent, self.client, self.CalendarID)
+        
     
     def groupLogin(self, groupName, groupPass):
         #find the appropriate group

@@ -10,6 +10,7 @@ import NewUserWindow
 import MapWindow
 import webbrowser
 import json
+import os
 
 class CalendarWindow(Toplevel):
     def __init__(self, parent, client, calendarID):
@@ -36,7 +37,7 @@ class CalendarWindow(Toplevel):
         self.placeWidgets()
         
         #get embed code for calendar
-        
+        self.produceHTMLFile()
         #open calendar in browser
         
                
@@ -143,7 +144,22 @@ class CalendarWindow(Toplevel):
     def storeTimes(self):
         self.eventStart=self.startDateString.get()
         self.eventEnd=self.endDateString.get()
-        
+
+    #create an HTML file with the user's calendar
+    def produceHTMLFile(self):
+        message = """<iframe src="https://www.google.com/calendar/embed?mode=WEEK&amp;height=600&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=""" 
+        message += self.calendarID 
+        message += """&ctz=America/Chicago" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>"""
+        #check to see if file exists, if so delete it
+        try:
+            os.remove('calendar.html')
+        except OSError:
+            pass
+        fh = open("calendar.html", "w")
+        fh.write(message)
+        fh.close()
+        webbrowser.open('calendar.html')
+                
                 
 def main():
     

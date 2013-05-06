@@ -11,16 +11,7 @@ from ttk import *
 
 
 #create a window to allow the user to login to a given group a
-class EventNamingWindow(Toplevel):
-    #windowHeight = None
-   # windowWidth = None
-#     newNameString = None
-#     newPassString = None
-#     newConfirmString = None
-#     existNameString = None
-#     existPassString = None
-    
-    
+class EventNamingWindow(Toplevel): 
     def __init__(self, parent, calendarClient):
         Toplevel.__init__(self, parent)
         self.parent = parent

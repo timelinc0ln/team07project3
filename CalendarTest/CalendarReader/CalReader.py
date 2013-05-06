@@ -171,11 +171,7 @@ class LoginWindow(Toplevel):
     
     def hide(self):
         self.withdraw()     
-        
-    def showCalWindow(self):
-        calWindow = CalendarWindow.CalendarWindow(self.parent, self.client)
-        webbrowser.open('calendar.html') 
-           
+          
 
         
 class Group():
