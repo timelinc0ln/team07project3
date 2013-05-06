@@ -129,7 +129,7 @@ class CalendarSelectionWindow(Toplevel):
         else:
             print ("No calendar selected")
         return
-      
+    
     def deselectCalendar(self):
         #move selected calendar in selectedCalendars to userCalendars, if an entry is selected
         if len(self.selectedCalendars.curselection()) != 0:
@@ -273,7 +273,26 @@ class CalendarSelectionWindow(Toplevel):
 #           returned_calendar = self.cal_client.InsertCalendarSubscription(calendar)
 #           return returned_calendar
         return  
-      
+    def membersOfGroup (self, groupName):
+        emailAddresses=[]
+        self.read_groupData('GroupDatabase.json')
+        self.read_userData('UserDatabase.json')
+        for Groups in self.groupData['Groups']:
+            if Groups['groupName']==groupName:
+                for Users in self.userData['Users']:
+                    emailAddresses.push(Users['googleid'])
+                return emailAddresses
+    
+    def read_groupData(self, filename):
+        json_data=open(filename)
+        groupData=json.load(json_data)
+        self.groupData=groupData
+            
+    def read_userData(self, filename):
+        json_data=open(filename)
+        userData=json.load(json_data)
+        self.userData=userData
+        
 def main():
     
     root = Tk()

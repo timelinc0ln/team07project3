@@ -12,6 +12,7 @@ from ttk import *
 import EventNamingWindow
 import CalendarWindow
 import MapWindow
+import json
 
 
 #create a window to allow the user to login to a given group a
@@ -169,6 +170,25 @@ class ConfirmEventWindow(Toplevel):
                 self.calendarClient.InsertEvent(new_event=newEvent, insert_uri=self.calendarEventFeedUri)
         return
 
+    def membersOfGroup (self, groupName):
+        emailAddresses=[]
+        self.read_groupData('GroupDatabase.json')
+        self.read_userData('UserDatabase.json')
+        for Groups in self.groupData['Groups']:
+            if Groups['groupName']==groupName:
+                for Users in self.userData['Users']:
+                    emailAddresses.push(Users['googleid'])
+                return emailAddresses
+            
+    def read_groupData(self, filename):
+        json_data=open(filename)
+        groupData=json.load(json_data)
+        self.groupData=groupData
+            
+    def read_userData(self, filename):
+        json_data=open(filename)
+        userData=json.load(json_data)
+        self.userData=userData
 def main():
     
     root = Tk()

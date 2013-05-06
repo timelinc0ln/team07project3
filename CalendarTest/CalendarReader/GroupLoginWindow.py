@@ -153,7 +153,7 @@ class GroupLoginWindow(Toplevel):
                 else:
                     print ("Invalid registration; please fill all entry fields.")
             #break this down and make it more legible
-            elif callerName == "Login":          
+            elif callerName == "Login":
                 print("Login clicked")
                 if self.allFieldsCompleted(callerName):   
                     groupName = self.existNameString.get()
