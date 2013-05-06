@@ -28,6 +28,8 @@ class CalendarSelectionWindow(Toplevel):
         self.calendarClient = calendarClient
         self.groupClient = groupClient
         self.groupName = groupName
+        self.groupCalendarID = self.getGroupCalendarID(self.groupName)
+        print(self.groupCalendarID)
         self.initUI()
         
     def initUI(self):
@@ -87,9 +89,10 @@ class CalendarSelectionWindow(Toplevel):
                 #update the group calendar with events from the selected calendar
                 self.updateGroupCalendar()
                 #subscribe the user to the group calendar
-                self.subscribeUser()
+#                 self.subscribeUser()
                 #hide the window
-                calWin = CalendarWindow.CalendarWindow(self.parent, self.groupClient, calendarID = self.getGroupCalendarID(self.groupName) )
+                calWin = CalendarWindow.CalendarWindow(self.parent, self.groupClient, self.groupCalendarID)
+                self.withdraw()
        
     def seedCalendarList(self):
         #insert calendar names into userCalendars
@@ -168,27 +171,21 @@ class CalendarSelectionWindow(Toplevel):
             #find group calendar
             #group calendar id should be accessed as part of a group; for now, use the following variable
             #calendarID=  "n3e76680gcabna20da1gaktg34%40group.calendar.google.com"
-            calendarID = self.getGroupCalendarID(self.groupName)
-            groupCalendar = None
+            calendarID = self.groupCalendarID
+            self.groupCalendar = None
             
             server_calendar_feed = self.groupClient.GetOwnCalendarsFeed()
             for server_calendar in server_calendar_feed.entry:
                 server_calendar_id = CalAccessMethods.getCalendarID(server_calendar.id.text)
                 if server_calendar_id == calendarID:
-                    groupCalendar = server_calendar
+                    self.groupCalendar = server_calendar
                     
-            print(groupCalendar)
-            
-            #get each event in calendarsToAccess and add a duplicate event to groupCalendar
-#             for cal in calendarsToAccess:
-#                 eventsFound = []
-#                 eventToAdd = gdata.calendar.data.CalendarEventEntry()
-                
-#                 print (currentCalendar)
-#                 events = self.calendarClient.GetCalendarEventFeed(currentCalendar)
+            print(self.groupCalendar)
+
             for event in eventsToAdd:
                 groupCalendarEventFeedUri = self.groupClient.GetCalendarEventFeedUri(calendarID)
                 groupCalendarEventFeed = self.groupClient.GetCalendarEventFeed(uri=groupCalendarEventFeedUri)
+                
                 print("Attempting to add event to calendar")
                 self.groupClient.InsertEvent(new_event=event,insert_uri=groupCalendarEventFeedUri)
                 
@@ -201,19 +198,22 @@ class CalendarSelectionWindow(Toplevel):
     def subscribeUser(self):
         #subscribe the user to the given calendar
         #get calendar from group calendar ID
-        groupCalendarID=  "n3e76680gcabna20da1gaktg34%40group.calendar.google.com"
+        
+        print("group calendar id")
+        print(self.groupCalendarID)
         groupCalendar = gdata.calendar.data.CalendarEntry()
-            
+             
         calendarFeed = self.groupClient.GetOwnCalendarsFeed()
         for calendar in calendarFeed.entry:
-            calendarID= CalAccessMethods.getCalendarID(calendar.id.text)
-            if  groupCalendarID == calendarID:
-                groupCalendar = calendar
-        
+            calendarID = CalAccessMethods.getCalendarID(calendar.id.text)
+            print("calendar id")
+            print(calendarID)
+            if  self.groupCalendarID == calendarID:
+                print("Attempting to subscribe to calendar")
+                self.calendarClient.InsertCalendarSubscription(calendar)
+                print("Calendar subscription successfull!")        
         #subscribe user to calendar
-        print("Attempting to subscribe to calendar")
-        self.calendarClient.InsertCalendarSubscription(groupCalendar)
-        print("Calendar subscription successfull!")
+        
 #           print 'Subscribing to the calendar with ID: %s' % id
 #           calendar = gdata.calendar.data.CalendarEntry()
 #           calendar.id = atom.data.Id(text=id)

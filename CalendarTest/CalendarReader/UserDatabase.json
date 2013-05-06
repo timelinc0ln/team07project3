@@ -8,34 +8,8 @@
           "groupname": "1"
         }
       ], 
-      "username": "1", 
-      "userpassword": "1"
-    }, 
-    {
-      "googleid": "patrickcasey2014", 
-      "googlepass": "extremetimelinc0lnmeatball", 
-      "grouplist": [
-        {
-          "groupname": "1"
-        }, 
-        {
-          "groupname": "1"
-        }, 
-        {
-          "groupname": "1"
-        }, 
-        {
-          "groupname": "1"
-        }, 
-        {
-          "groupname": "1"
-        }, 
-        {
-          "groupname": "1"
-        }
-      ], 
-      "username": "new", 
-      "userpassword": "asdf"
+      "username": "a", 
+      "userpassword": "a"
     }
   ]
 }

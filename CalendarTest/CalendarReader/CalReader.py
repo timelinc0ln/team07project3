@@ -171,11 +171,6 @@ class LoginWindow(Toplevel):
     
     def hide(self):
         self.withdraw()     
-          
-
-        
-class Group():
-    None
        
 def main():
     

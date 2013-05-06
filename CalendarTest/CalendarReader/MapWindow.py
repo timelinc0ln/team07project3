@@ -65,6 +65,8 @@ class MapWindow(Toplevel):
                 #pass the entered location and the passed times to the naming window
                 self.storeLocation()
                 naming = EventNamingWindow.EventNamingWindow(self.parent, self.calendarID, self.groupClient, self.location, self.eventStart, self.eventEnd)
+                self.withdraw()
+                #self.withdraw()
             elif callerName == "Back":
                 print("Back button pressed")
                 #close window, go back to calendar window

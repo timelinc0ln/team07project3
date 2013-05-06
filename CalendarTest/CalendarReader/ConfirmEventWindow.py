@@ -9,6 +9,9 @@ import gdata.calendar.client
 import CalAccessMethods
 from Tkinter import *
 from ttk import *
+import EventNamingWindow
+import CalendarWindow
+import MapWindow
 
 
 #create a window to allow the user to login to a given group a
@@ -84,23 +87,31 @@ class ConfirmEventWindow(Toplevel):
             if callerName == "Name":
                 print("Name clicked")
                 #hide the window, show the EventNamingWindow
+                name = EventNamingWindow.EventNamingWindow(self.parent, self.calendarID, 
+                    self.calendarClient, self.eventPlace, self.eventStart, self.eventEnd)
                 self.withdraw()
             elif callerName == "Date":
                 print("Date clicked")
                 #hide the window, show the CalendarWindow
+                calWin = CalendarWindow.CalendarWindow(self.parent, self.calendarClient, 
+                    self.calendarID)
                 self.withdraw()
             elif callerName == "Place":
                 print("Place clicked")
                 #hide the window, show the LocationWindow
+                mapwin = MapWindow.MapWindow(self.parent, self.calendarClient, self.calendarID, 
+                    self.eventStart, self.eventEnd) #sketchy
                 self.withdraw()
             elif callerName == "Add":
                 print("Add clicked")
                 #add event, hide the window, show mainMenu Window
                 self.makeEvent()
-#                 self.withdraw()
+                self.withdraw()
             elif callerName == "Cancel":
                 print("Cancel clicked")
                 #hide the window, show mainMenu Window
+                calWin = CalendarWindow.CalendarWindow(self.parent, self.calendarClient, 
+                    self.calendarID)
                 self.withdraw()
 
 

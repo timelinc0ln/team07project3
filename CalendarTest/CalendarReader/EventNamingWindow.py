@@ -57,6 +57,7 @@ class EventNamingWindow(Toplevel):
                 self.EventName = self.nameEntryString.get()
                 #hide the window, open a confirmation window, pass main program the event name
                 confirm = ConfirmEventWindow.ConfirmEventWindow(self.parent, self.calendarClient, self.calendarID, self.EventName, self.eventStart, self.eventEnd, self.location)
+                self.withdraw()
             elif callerName == "Back":
                 print("Back clicked")
                 #hide the window, clear self.nameEntryString, show map window

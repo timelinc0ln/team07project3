@@ -20,14 +20,14 @@ import CalendarSelectionWindow
 
 #create a window to allow the user to login to a given group a
 class InvitationWindow(Toplevel):   # also need to pass in Group username/password
-    def __init__(self, parent, calendarClient, groupClient, username, password): 
+    def __init__(self, parent, calendarClient, groupClient, groupUsername, password): 
         Toplevel.__init__(self, parent)
         self.parent = parent
         self.windowWidth = parent.winfo_reqwidth()+parent.winfo_x()
         self.windowHeight = parent.winfo_reqheight()
         self.calendarClient = calendarClient
         self.groupClient = groupClient
-        self.groupUsername = username # pass these in later
+        self.groupUsername = groupUsername # pass these in later
         self.groupPassword = password
         self.attachment = "C:\Users\casey\Downloads\GroupMeet.png"
         self.subject = "GroupMeet Invitation"
