@@ -251,6 +251,18 @@ class CalendarSelectionWindow(Toplevel):
         self.sendInvites()
         #subscribe the user to the given calendar
         #get calendar from group calendar ID
+<<<<<<< HEAD
+=======
+        #groupCalendarID = "3emdggfncm6m9i0048t1rmmmls@group.calendar.google.com"
+        groupCalendarID = self.getGroupCalendarID(self.groupName)
+        groupCalendar = gdata.calendar.data.CalendarEntry()
+            
+        calendarFeed = self.groupClient.GetOwnCalendarsFeed()
+        for calendar in calendarFeed.entry:
+            calendarID = CalAccessMethods.getCalendarID(calendar.id.text)
+            if  groupCalendarID == calendarID:
+                groupCalendar = calendar
+>>>>>>> pushing
         
 #         print("group calendar id")
 #         print(self.groupCalendarID)

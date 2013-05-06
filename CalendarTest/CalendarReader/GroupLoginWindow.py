@@ -199,7 +199,7 @@ class GroupLoginWindow(Toplevel):
         #create a new calendar on the server account for the group
         calendarDescription = "Calendar for group " + groupName + "."
         groupCalendar = CalAccessMethods.createCalendar(title=groupName, description=calendarDescription)
-        self.groupClient.InsertCalendar(new_calendar=groupCalendar)
+        self.groupClient.InsertCalendar(new_calendar=groupCalendar, visibility="public")
     
     def getGroupCalendarID(self,groupName):
         #get the ID of the group calendar

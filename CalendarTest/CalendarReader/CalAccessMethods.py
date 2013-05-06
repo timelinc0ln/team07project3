@@ -27,11 +27,13 @@ def createCalendar(title='New Calendar', description='No Description',
     calendar.where.append(gdata.calendar.data.CalendarWhere(value=location))
     calendar.color = gdata.calendar.data.ColorProperty(value=color)
     calendar.timezone = gdata.calendar.data.TimeZoneProperty(value=time_zone)
+#     calendar.visibility = gdata.calendar.Visibility(text="public")
 
     if hidden:
       calendar.hidden = gdata.calendar.data.HiddenProperty(value='true')
     else:
       calendar.hidden = gdata.calendar.data.HiddenProperty(value='false')
+
 
     return calendar
 
