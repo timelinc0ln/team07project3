@@ -94,9 +94,25 @@ class CalendarWindow(Toplevel):
         year = rawDate[:4:]
         month = rawDate[5:7:]
         day = rawDate[8:10:]
-        print (year)
+        hour = rawDate[11:13:]
+        min = rawDate[14:16:]
+        sec = rawDate[17:19:]
+        print(year)
         print(month)
         print(day)
+        print(hour)
+        print(min)
+        print(sec)
+        valMonth = self.validMonth(month)
+        valDay = self.validDay(month,day)
+        valHour = self.validHour(hour)
+        valMin = self.validMinute(min)
+        valSec = self.validSecond(sec)
+        print(valMonth)
+        print(valDay)
+        print(valHour)
+        print(valMin)
+        print(valSec)
         
         return True
     
