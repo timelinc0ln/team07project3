@@ -113,15 +113,15 @@ class LoginWindow(Toplevel):
     def Login(self):
         if self.accountLoginCheck(self.userName, self.userPass):
             try:
-                calendarService = gdata.calendar.service.CalendarService()
-                calendarService.email = self.userEmail
-                calendarService.password = self.userEmailPass
-                calendarService.source = 'CalReader' # not really sure what this is
-                calendarService.ProgrammaticLogin() #add an if statement or something to catch a bad authentication error;
-                print(self.userEmail)
-                print(self.userEmailPass)
+                calendarService = gdata.calendar.client.CalendarClient()
+                email = self.userEmail
+                password = self.userEmailPass
+                source = 'CalReader' # not really sure what this is
+                calendarService.ClientLogin(email, password, source) #add an if statement or something to catch a bad authentication error;
+                self.groupClient = gdata.calendar.client.CalendarClient()
+                self.groupClient.ClientLogin('project3team07@gmail.com', 'teamseven', 'GroupMeet')
                 self.haveLogged = True
-                self.showCalWindow()
+                groupLogin = GroupLoginWindow.GroupLoginWindow(self.parent, self.userName.get(), calendarService, self.groupClient)
                 self.hide()
                 return calendarService
             except gdata.service.BadAuthentication:

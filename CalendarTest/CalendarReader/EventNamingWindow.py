@@ -8,16 +8,21 @@ import gdata.calendar.service
 import gdata.calendar.client
 from Tkinter import *
 from ttk import *
+import ConfirmEventWindow
 
 
 #create a window to allow the user to login to a given group a
 class EventNamingWindow(Toplevel): 
-    def __init__(self, parent, calendarClient):
+    def __init__(self, parent, calendarID, calendarClient, location, eventStart, eventEnd):
         Toplevel.__init__(self, parent)
         self.parent = parent
         self.windowWidth = parent.winfo_reqwidth()+parent.winfo_x()
         self.windowHeight = parent.winfo_reqheight()
         self.calendarClient = calendarClient
+        self.eventStart = eventStart
+        self.eventEnd = eventEnd
+        self.location = location
+        self.calendarID = calendarID
         self.initUI()
         
     def initUI(self):
@@ -49,7 +54,9 @@ class EventNamingWindow(Toplevel):
         if callerType == "Button":
             if callerName == "Next":
                 print("Next clicked")
+                self.EventName = self.nameEntryString.get()
                 #hide the window, open a confirmation window, pass main program the event name
+                confirm = ConfirmEventWindow.ConfirmEventWindow(self.parent, self.calendarClient, self.calendarID, self.EventName, self.eventStart, self.eventEnd, self.location)
             elif callerName == "Back":
                 print("Back clicked")
                 #hide the window, clear self.nameEntryString, show map window

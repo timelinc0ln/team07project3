@@ -173,7 +173,7 @@ class GroupLoginWindow(Toplevel):
                                 #pass group information to CalendarSelectionWindow
                                 print("New user")
                                 self.updateUserJson(groupName, self.userName)
-                                calWindow = CalendarSelectionWindow.CalendarSelectionWindow(self.parent, self.calendarClient, self.groupClient)
+                                calWindow = CalendarSelectionWindow.CalendarSelectionWindow(self.parent, self.calendarClient, self.groupClient, groupName)
                                 self.withdraw()
                         else:
                             print("Incorrect Password. Login Failed.")

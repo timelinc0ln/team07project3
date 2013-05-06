@@ -1,52 +1,40 @@
 {
   "Users": [
     {
-      "googleid": "johnny112@gmail.com", 
-      "googlepass": "password112", 
-      "grouplist": [
-        {
-          "groupname": "Group 1"
-        }, 
-        {
-          "groupname": "Group 2"
-        }, 
-        {
-          "groupname": "anothergroup"
-        }, 
-        {
-          "groupname": "group22"
-        }
-      ], 
-      "username": "johnny112", 
-      "userpassword": "applejacks"
-    }, 
-    {
       "googleid": "projthee@gmail.com", 
       "googlepass": "proj3pass", 
       "grouplist": [
         {
-          "groupname": "group22"
+          "groupname": "1"
         }
       ], 
-      "username": "test", 
-      "userpassword": "test"
+      "username": "1", 
+      "userpassword": "1"
     }, 
     {
-      "googleid": "project3team07@gmail.com", 
-      "googlepass": "teamseven", 
-      "grouplist": [], 
-      "username": "pat101", 
-      "userpassword": "1234"
-    }, 
-    {
-      "googleid": "patrickcasey2014@gmail.com", 
+      "googleid": "patrickcasey2014", 
       "googlepass": "extremetimelinc0lnmeatball", 
       "grouplist": [
         {
-          "groupname": "Group Awesome"
+          "groupname": "1"
+        }, 
+        {
+          "groupname": "1"
+        }, 
+        {
+          "groupname": "1"
+        }, 
+        {
+          "groupname": "1"
+        }, 
+        {
+          "groupname": "1"
+        }, 
+        {
+          "groupname": "1"
         }
       ], 
-      "username": "new1", 
+      "username": "new", 
       "userpassword": "asdf"
     }
   ]

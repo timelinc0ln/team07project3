@@ -9,22 +9,25 @@ import gdata.calendar.service
 import gdata.calendar.data
 import gdata.calendar.client
 import CalAccessMethods
+import CalendarWindow
 import atom
 from atom import *
 from Tkinter import *
 from ttk import *
+import json
 
 
 #create a window to allow the user to decide which of his/her calendars will be added to the group calendar
-class CalendarSelectionWindow(Frame):
+class CalendarSelectionWindow(Toplevel):
     
-    def __init__(self, parent, calendarClient, groupClient):
-        Frame.__init__(self, parent)
+    def __init__(self, parent, calendarClient, groupClient, groupName):
+        Toplevel.__init__(self, parent)
         self.parent = parent
         self.windowWidth = parent.winfo_reqwidth()+parent.winfo_x()
         self.windowHeight = parent.winfo_reqheight()
         self.calendarClient = calendarClient
         self.groupClient = groupClient
+        self.groupName = groupName
         self.initUI()
         
     def initUI(self):
@@ -48,7 +51,7 @@ class CalendarSelectionWindow(Frame):
         self.parent.title("Select Calendars to Sync")
         self.style = Style()
         self.style.theme_use("default")
-        self.pack(fill=BOTH, expand = 1)
+        #self.pack(fill=BOTH, expand = 1)
         
         self.calendarSelectionMessage.grid(row=0, column=0, columnspan=8)
         self.calendarSelectionExplanation.set("Select which of your calendars you want to add to the group calendar below.")
@@ -62,7 +65,13 @@ class CalendarSelectionWindow(Frame):
         
         #fill the userCalendar box
         self.seedCalendarList()
-        
+
+    def getGroupCalendarID(self, groupName):
+        #get the ID of the group calendar
+        calendar_feed = self.groupClient.GetOwnCalendarsFeed()
+        for calendar_list_entry in calendar_feed.entry:
+            if calendar_list_entry.title.text == groupName:
+                return CalAccessMethods.getCalendarID(calendar_list_entry.id.text)  
     
     def callBack(self, callerType, callerName):
         #Buttons
@@ -80,6 +89,7 @@ class CalendarSelectionWindow(Frame):
                 #subscribe the user to the group calendar
                 self.subscribeUser()
                 #hide the window
+                calWin = CalendarWindow.CalendarWindow(self.parent, self.groupClient, calendarID = self.getGroupCalendarID(self.groupName) )
        
     def seedCalendarList(self):
         #insert calendar names into userCalendars
@@ -145,7 +155,7 @@ class CalendarSelectionWindow(Frame):
                      
 #                      CalAccessMethods.modifyEvent(calEvent, "John")
                      newEvent = gdata.calendar.data.CalendarEventEntry()
-                     newEvent = CalAccessMethods.modifyEvent(calEvent, "John")
+                     newEvent = CalAccessMethods.modifyEvent(calEvent, "User") #hard coded
                      #if it blows up here we haven't made events correctly yet
                      print(newEvent)
                      print("We made an event!")
@@ -157,7 +167,8 @@ class CalendarSelectionWindow(Frame):
             
             #find group calendar
             #group calendar id should be accessed as part of a group; for now, use the following variable
-            calendarID=  "n3e76680gcabna20da1gaktg34%40group.calendar.google.com"
+            #calendarID=  "n3e76680gcabna20da1gaktg34%40group.calendar.google.com"
+            calendarID = self.getGroupCalendarID(self.groupName)
             groupCalendar = None
             
             server_calendar_feed = self.groupClient.GetOwnCalendarsFeed()
@@ -177,7 +188,7 @@ class CalendarSelectionWindow(Frame):
 #                 events = self.calendarClient.GetCalendarEventFeed(currentCalendar)
             for event in eventsToAdd:
                 groupCalendarEventFeedUri = self.groupClient.GetCalendarEventFeedUri(calendarID)
-                groupCalendarEventFeed = self.calendarClient.GetCalendarEventFeed(uri=groupCalendarEventFeedUri)
+                groupCalendarEventFeed = self.groupClient.GetCalendarEventFeed(uri=groupCalendarEventFeedUri)
                 print("Attempting to add event to calendar")
                 self.groupClient.InsertEvent(new_event=event,insert_uri=groupCalendarEventFeedUri)
                 
@@ -221,7 +232,7 @@ def main():
     groupClient =  gdata.calendar.client.CalendarClient()
     groupClient.ClientLogin("project3team07@gmail.com", "teamseven", source = "Calendar Access")
     
-    app = CalendarSelectionWindow(root, myClient, groupClient)
+    app = CalendarSelectionWindow(root, myClient, groupClient, 'projthee@gmail.com')
     root.mainloop()
     
 if __name__ == '__main__':

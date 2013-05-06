@@ -13,12 +13,13 @@ import MapWindow
 import webbrowser
 import json
 import os
+import MapWindow
 
 class CalendarWindow(Toplevel):
     def __init__(self, parent, client, calendarID):
             Toplevel.__init__(self)
             self.parent = parent
-            self.client = client
+            self.groupClient = client
             self.calendarID = calendarID
             self.initUI()  
           
@@ -77,12 +78,18 @@ class CalendarWindow(Toplevel):
                 #store the entered date values
                 validStart = self.dateValid(self.startDateString.get())
                 validEnd = self.dateValid(self.endDateString.get())
+                
                 if validStart and validEnd:
                     self.storeTimes()
+                    self.openMapWindow()
             elif callerName == "Quit":
                 print("Quit button pressed")
-                #kill all windows, shut down program    
+                #kill all windows, shut down program  
+                self.withdraw()  
     
+    def openMapWindow(self):
+        mapWin = MapWindow.MapWindow(self.parent, self.groupClient, self.calendarID, self.eventStart, self.eventEnd)
+
     ValueError = exceptions.ValueError
     
     def validDateFormat(self, year, month, day, divider, hour, minute, second, rawDate):

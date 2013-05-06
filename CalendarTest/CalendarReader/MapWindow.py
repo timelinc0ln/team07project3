@@ -4,12 +4,17 @@ from ttk import *
 import CalReader
 import pymaps
 from googlemaps import GoogleMaps
+import EventNamingWindow
 
 class MapWindow(Toplevel):
     #location=None
-    def __init__(self, parent):
+    def __init__(self, parent, groupClient, calendarID, eventStart, eventEnd):
         Toplevel.__init__(self)
         self.parent = parent
+        self.eventStart = eventStart
+        self.eventEnd = eventEnd
+        self.groupClient = groupClient
+        self.calendarID = calendarID
         self.initUI()
     
     def initUI(self):
@@ -58,6 +63,8 @@ class MapWindow(Toplevel):
             elif callerName == "Next":
                 print("Next button pressed")
                 #pass the entered location and the passed times to the naming window
+                self.storeLocation()
+                naming = EventNamingWindow.EventNamingWindow(self.parent, self.calendarID, self.groupClient, self.location, self.eventStart, self.eventEnd)
             elif callerName == "Back":
                 print("Back button pressed")
                 #close window, go back to calendar window
@@ -72,7 +79,7 @@ class MapWindow(Toplevel):
         m = pymaps.PyMap(lat, lng)
         m.key = "ABQIAAAAQQRAsOk3uqvy3Hwwo4CclBTrVPfEE8Ms0qPwyRfPn-DOTlpaLBTvTHRCdf2V6KbzW7PZFYLT8wFD0A"
         m.maps[0].zoom = 17
-        q = [lat,lng, 'Search Result Location'] 
+        q = [lat,lng, 'Search Result Location: '+ address] 
         m.maps[0].setpoint(q)
         open('test.html','wb').write(m.showhtml())   # generate test file
         webbrowser.open('test.html')

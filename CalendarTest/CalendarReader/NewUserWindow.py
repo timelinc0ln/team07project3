@@ -91,6 +91,7 @@ class NewUserWindow(Toplevel):
                 self.groupClient = self.loginGroup()
                 #check that the account creation was successful
                 if accountMade == True:
+                    self.withdraw()
                     groupLogin = GroupLoginWindow.GroupLoginWindow(self.parent, self.userNameString.get(), self.client, self.groupClient)
             elif callerName == "Cancel":
                 print("Cancel clicked")
@@ -190,7 +191,7 @@ class NewUserWindow(Toplevel):
         password = self.googlePassString.get()
         source = 'GroupMeet' 
         client.ClientLogin(email, password, source) 
-        return client\
+        return client
 
     def loginGroup(self):
         groupClient = gdata.calendar.client.CalendarClient()

@@ -52,7 +52,7 @@ class InvitationWindow(Toplevel):   # also need to pass in Group username/passwo
         self.emailEntryString = StringVar()
         #define widgets
         self.instructionMessage = Label(self, text="Enter the email addresses of the invitees below, separated by commas", background='lightgray')
-        self.emailEntryPrompt = Label(self, text="Event name:", background='lightgray')
+        self.emailEntryPrompt = Label(self, text="Email Address:", background='lightgray')
         self.emailEntry = Entry(self, textvariable = self.emailEntryString, width=30)
         self.confirmButton = Button(self, text="Confirm", command=lambda: self.callBack("Button","Confirm"))
         self.skipButton = Button(self, text="Skip", command=lambda: self.callBack("Button","Skip"))
@@ -77,13 +77,13 @@ class InvitationWindow(Toplevel):   # also need to pass in Group username/passwo
             if callerName == "Confirm":
                 print("Confirm clicked")
                 #email every email address in the list
-                self.sendInvites()
-                calWinodw = CalendarSelectionWindow.CalendarSelectionWindow(self.parent, self.calendarClient, self.groupClient)
+                self.sendInvites() 
+                calWindow = CalendarSelectionWindow.CalendarSelectionWindow(self.parent, self.calendarClient, self.groupClient, self.groupUsername)
                 self.withdraw()
             elif callerName == "Skip":
                 print("Skip clicked")
-                #hide the window, clear self.nameEntryString, show map window
-                calWinodw = CalendarSelectionWindow.CalendarSelectionWindow(self.parent, self.calendarClient, self.groupClient)
+                #hide the window, clear self.nameEntryString, show map window  
+                calWindow = CalendarSelectionWindow.CalendarSelectionWindow(self.parent, self.calendarClient, self.groupClient, self.groupUsername)
                 self.withdraw()
 
     def mail(self, to, subject, text, attach):
@@ -125,7 +125,9 @@ def main():
     root = Tk()
     root.geometry("600x155+300+300")
     #print(root.geometry.)
-    app = InvitationWindow(root, gdata.calendar.client.CalendarClient(), "Team07", "12345")
+    client = gdata.calendar.client.CalendarClient()
+    client.ClientLogin("project3team07@gmail.com", "teamseven", 'GroupMeet')
+    app = InvitationWindow(root, client, client, "Team07", "12345")
     root.mainloop()
 
 if __name__ == '__main__':

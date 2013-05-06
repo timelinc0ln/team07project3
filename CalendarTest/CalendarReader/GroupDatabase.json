@@ -1,103 +1,15 @@
 {
   "Groups": [
     {
-      "calendarId": "Empty for now", 
-      "dateCreated": "4/26/2013", 
-      "groupName": "Group 1", 
+      "calendarId": "2mu41i9jr5jc37fs2un9rtmc5o%40group.calendar.google.com", 
+      "dateCreated": "2013-05-05T23:10:18", 
+      "groupName": "1", 
       "members": [
         {
-          "name": "Will"
-        }
-      ], 
-      "password": "1234"
-    }, 
-    {
-      "calendarId": "Empty for now", 
-      "dateCreated": "1/17/2012", 
-      "groupName": "Group 2", 
-      "members": [
-        {
-          "name": "John"
-        }
-      ], 
-      "password": "4321"
-    }, 
-    {
-      "calendarId": "hc81lnfmc9f4av8q58g48ns404%40group.calendar.google.com", 
-      "dateCreated": "2013-05-04T20:38:38", 
-      "groupName": "project3team07", 
-      "members": [
-        {
-          "name": "Spartacus"
+          "name": "1"
         }
       ], 
       "password": "1"
-    }, 
-    {
-      "calendarId": "3k3e4v2a504cpf3g1ebjs2hnlk%40group.calendar.google.com", 
-      "dateCreated": "2013-05-05T15:44:15", 
-      "groupName": "registertest", 
-      "members": [
-        {
-          "name": "Spartacus"
-        }
-      ], 
-      "password": "123456"
-    }, 
-    {
-      "calendarId": "9qgku839287jtaoeg7138aq94s%40group.calendar.google.com", 
-      "dateCreated": "2013-05-05T16:16:22", 
-      "groupName": "asdf", 
-      "members": [
-        {
-          "name": "Spartacus"
-        }
-      ], 
-      "password": "1234"
-    }, 
-    {
-      "calendarId": "u121t71qmut2k7l105v4f8v48c%40group.calendar.google.com", 
-      "dateCreated": "2013-05-05T16:17:51", 
-      "groupName": "newgroup2", 
-      "members": [
-        {
-          "name": "Spartacus"
-        }
-      ], 
-      "password": "1234"
-    }, 
-    {
-      "calendarId": "89o7p9ivh6qlscktr31ojrp9tg%40group.calendar.google.com", 
-      "dateCreated": "2013-05-05T16:19:04", 
-      "groupName": "anothergroup", 
-      "members": [
-        {
-          "name": "johnny112"
-        }
-      ], 
-      "password": "123"
-    }, 
-    {
-      "calendarId": "v26vdu89icmps84au7uac249lk%40group.calendar.google.com", 
-      "dateCreated": "2013-05-05T16:31:38", 
-      "groupName": "group22", 
-      "members": [
-        {
-          "name": "johnny112"
-        }
-      ], 
-      "password": "pass"
-    }, 
-    {
-      "calendarId": "55vb1spt8aum0scvb6db4dn7sc%40group.calendar.google.com", 
-      "dateCreated": "2013-05-05T17:41:47", 
-      "groupName": "Group Awesome", 
-      "members": [
-        {
-          "name": "new1"
-        }
-      ], 
-      "password": "123"
     }
   ]
 }
