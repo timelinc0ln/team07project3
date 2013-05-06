@@ -1,9 +1,11 @@
 import gdata.docs.service
 import gdata.calendar.service
 import gdata.calendar.client
+import exceptions
 import string
 from Tkinter import *
 from ttk import *
+from string import *
 import GroupLoginWindow
 import InvitationWindow
 import NewUserWindow
@@ -73,89 +75,116 @@ class CalendarWindow(Toplevel):
             if callerName == "Next":
                 print("Next button pressed")
                 #store the entered date values
-                self.validDateTime(self.startDateString.get())
+                validStart = self.dateValid(self.startDateString.get())
+                validEnd = self.dateValid(self.endDateString.get())
+                if validStart and validEnd:
+                    self.storeTimes()
             elif callerName == "Quit":
                 print("Quit button pressed")
                 #kill all windows, shut down program    
     
-    def dateValid(self):
-        #determine whether the date is valid
-        #check the format of the entered date
-        
-        #check to make sure date actually exists
-        
-        #check to see if there are any events at that time
-        return True
+    ValueError = exceptions.ValueError
     
-    def validDateFormat(self, rawDate):
-        return True
-    
-    def validDateTime(self, rawDate):
-        year = rawDate[:4:]
-        month = rawDate[5:7:]
-        day = rawDate[8:10:]
-        hour = rawDate[11:13:]
-        min = rawDate[14:16:]
-        sec = rawDate[17:19:]
-        print(year)
-        print(month)
-        print(day)
-        print(hour)
-        print(min)
-        print(sec)
-        valMonth = self.validMonth(month)
-        valDay = self.validDay(month,day)
-        valHour = self.validHour(hour)
-        valMin = self.validMinute(min)
-        valSec = self.validSecond(sec)
-        print(valMonth)
-        print(valDay)
-        print(valHour)
-        print(valMin)
-        print(valSec)
-        
-        return True
-    
-    def validMonth(self, rawMonth):
-        month = string.atoi(rawMonth)
-        if month > 12 or month < 0:
+    def validDateFormat(self, year, month, day, divider, hour, minute, second, rawDate):
+        #compile date string again and make sure it matches the raw date
+        date = Template("$yr-$mon-$d$div$hr:$min:$sec")
+        newDate = date.substitute(yr=year, mon=month, d=day, div=divider, hr=hour, min=minute, sec=second)
+        if rawDate != newDate:
             return False
         return True
     
-    def validDay(self, rawMonth, rawDay):
-        month = string.atoi(rawMonth)
-        day = string.atoi(rawDay)
+    def dateValid(self, rawDate):
+        #break date into segments
+        year = rawDate[:4:]
+        month = rawDate[5:7:]
+        day = rawDate[8:10:]
+        timeDivider = rawDate[10:11:]
+        hour = rawDate[11:13:]
+        min = rawDate[14:16:]
+        sec = rawDate[17:19:]
+        #check that the format is correct
+        valFormat = self.validDateFormat(year, month, day, timeDivider, hour, min, sec, rawDate)
+        #check for validity of each segment
+        valYear = self.validYear(year)
+        valMonth = self.validMonth(month)
+        valDay = self.validDay(month,day)
+        valDivider = self.validDivider(timeDivider)
+        valHour = self.validHour(hour)
+        valMin = self.validMinute(min)
+        valSec = self.validSecond(sec)
         
-        if month == 1 or month == 3 or month == 5 or month == 7 or month == 8 or month == 10 or month == 12:
-            if day > 31:
+        if valFormat and valYear and valMonth and valDay and valDivider and valHour and valMin and valSec:
+            return True
+        return False
+     
+    def validYear(self, rawYear):
+        try:
+            year = string.atoi(rawYear)
+            return True
+        except ValueError:
+            return False
+        
+    def validMonth(self, rawMonth):
+        try:
+            month = string.atoi(rawMonth)
+            if month > 12 or month < 0:
                 return False
-        elif month == 4 or month == 6 or month == 9 or month == 11:
-            if day > 30:
+            return True
+        except ValueError:
+            return False
+    
+    def validDay(self, rawMonth, rawDay):
+        try:
+            month = string.atoi(rawMonth)
+            day = string.atoi(rawDay)
+        
+            if month == 1 or month == 3 or month == 5 or month == 7 or month == 8 or month == 10 or month == 12:
+                if day > 31:
+                    return False
+            elif month == 4 or month == 6 or month == 9 or month == 11:
+                if day > 30:
+                    return False
+            elif month == 2:
+                if day > 28:    #ignore leap year
+                    return False
+            elif day < 1:
                 return False
-        elif month == 2:
-            if day > 28:    #ignore leap year
-                return False
-        elif day < 1:
+            return True
+        except ValueError:
+            return False
+    
+    def validDivider(self, divider):
+        if divider != "T":
             return False
         return True
     
     def validHour(self, rawHour):
-        hour = string.atoi(rawHour)
-        if hour > 23 or hour < 0:
+        try:
+            hour = string.atoi(rawHour)
+            if hour > 23 or hour < 0:
+                return False
+            return True
+        except ValueError:
             return False
-        return True
     
     def validMinute(self, rawMinute):
-        minute = string.atoi(rawMinute)
-        if minute>59 or minute < 0:
+        try:
+            minute = string.atoi(rawMinute)
+            if minute>59 or minute < 0:
+                return False
+            return True
+        except ValueError:
             return False
-        return True
         
     def validSecond(self, rawSecond):
-        second = string.atoi(rawSecond)
-        if second>59 or second< 0:
+        try:
+            second = string.atoi(rawSecond)
+            if second>59 or second< 0:
+                return False
+            return True
+        except ValueError:
             return False
-        return True
+
     
     def storeTimes(self):
         self.eventStart=self.startDateString.get()
