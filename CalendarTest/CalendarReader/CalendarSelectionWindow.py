@@ -15,7 +15,13 @@ from atom import *
 from Tkinter import *
 from ttk import *
 import json
-
+import smtplib
+from email.MIMEBase import MIMEBase
+from email.MIMEText import MIMEText
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email import Encoders
+import os
 
 #create a window to allow the user to decide which of his/her calendars will be added to the group calendar
 class CalendarSelectionWindow(Toplevel):
@@ -31,6 +37,19 @@ class CalendarSelectionWindow(Toplevel):
         self.groupCalendarID = self.getGroupCalendarID(self.groupName)
         print(self.groupCalendarID)
         self.initUI()
+        self.attachment = "C:\Users\casey\Downloads\GroupMeet.png"
+        self.subject = "GroupMeet Invitation"
+        self.message = """Howdy!
+        This is an automatic notification provided by the GroupMeet service informing you that you have been invited to an event
+        by the following group:
+
+        GroupName: %s
+        
+        Please log in to the GroupMeet Service in order to view this event.
+
+        Thanks!
+
+        -GroupMeet Development Team""" % (self.groupName)
         
     def initUI(self):
         #define strings for use in widgets
@@ -45,26 +64,25 @@ class CalendarSelectionWindow(Toplevel):
         self.deselectCalendarButton = Button(self, text="<<", command=lambda: self.callBack("Button", "Deselect"))
         self.nextButton = Button(self, text="Next", command=lambda: self.callBack("Button", "Next"))
         #labels
-        self.calendarSelectionMessage = Label(self, textvariable=self.calendarSelectionExplanation, background="lightgray")
-        self.userCalendarHeader = Label(self, text= "User Calendars", background="lightgray")
-        self.selectedCalendarHeader = Label(self, text= "Selected Calendars", background="lightgray")
+        self.calendarSelectionMessage = Label(self, textvariable=self.calendarSelectionExplanation)
+        self.userCalendarHeader = Label(self, text= "User Calendars")
+        self.selectedCalendarHeader = Label(self, text= "Selected Calendars")
         
         #design window
         self.parent.title("Select Calendars to Sync")
         self.style = Style()
         self.style.theme_use("default")
-        self.configure(background="lightgray")
         #self.pack(fill=BOTH, expand = 1)
         
-        self.calendarSelectionMessage.grid(row=0, column=0, columnspan=8, padx=5, pady=5)
+        self.calendarSelectionMessage.grid(row=0, column=0, columnspan=8)
         self.calendarSelectionExplanation.set("Select which of your calendars you want to add to the group calendar below.")
-        self.userCalendarHeader.grid(row=1,column=1,padx=5, pady=5, sticky=S)
-        self.selectedCalendarHeader.grid(row=1, column=3, padx=5, pady=5, sticky=S)
-        self.userCalendars.grid(row=2,column=1, rowspan=4, padx=5, pady=5, sticky=E)
-        self.selectedCalendars.grid(row=2, column=3, rowspan=4, padx=5, pady=5, sticky=W)
-        self.selectCalendarButton.grid(row=3, column=2, padx=5, pady=5)
-        self.deselectCalendarButton.grid(row=4, column=2,padx=5, pady=5)
-        self.nextButton.grid(row=6, column=3,padx=5, pady=5, sticky=E+W)
+        self.userCalendarHeader.grid(row=1,column=1, sticky=S)
+        self.selectedCalendarHeader.grid(row=1, column=3, sticky=S)
+        self.userCalendars.grid(row=2,column=1, rowspan=4, sticky=E)
+        self.selectedCalendars.grid(row=2, column=3, rowspan=4, sticky=W)
+        self.selectCalendarButton.grid(row=3, column=2)
+        self.deselectCalendarButton.grid(row=4, column=2)
+        self.nextButton.grid(row=5, column=4)
         
         #fill the userCalendar box
         self.seedCalendarList()
@@ -90,7 +108,7 @@ class CalendarSelectionWindow(Toplevel):
                 #update the group calendar with events from the selected calendar
                 self.updateGroupCalendar()
                 #subscribe the user to the group calendar
-#                 self.subscribeUser()
+                #self.subscribeUser()
                 #hide the window
                 calWin = CalendarWindow.CalendarWindow(self.parent, self.groupClient, self.groupCalendarID)
                 self.withdraw()
@@ -195,24 +213,60 @@ class CalendarSelectionWindow(Toplevel):
         else:
             print("No calendars have been selected. Select a calendar to add before moving on.")
         return
-      
+
+        def mail(self, to, subject, text, attach):
+        gmail_user = "project3team07@gmail.com"
+        gmail_pwd = "teamseven"
+        msg = MIMEMultipart()
+
+        msg['From'] = gmail_user
+        msg['To'] = to
+        msg['Subject'] = subject
+
+        msg.attach(MIMEText(text))
+
+        part = MIMEBase('application', 'octet-stream')
+        part.set_payload(open(attach, 'rb').read())
+        Encoders.encode_base64(part)
+        part.add_header('Content-Disposition',
+               'attachment; filename="%s"' % os.path.basename(attach))
+        msg.attach(part)
+
+        mailServer = smtplib.SMTP("smtp.gmail.com", 587)
+        mailServer.ehlo()
+        mailServer.starttls()
+        mailServer.ehlo()
+        mailServer.login(gmail_user, gmail_pwd)
+        mailServer.sendmail(gmail_user, to, msg.as_string())
+        mailServer.close()
+
+    def sendInvites(self):
+        rawEmailInfo = self.emailEntryString.get()
+        emailAddresses = rawEmailInfo.split(",", )
+        #print (emailAddresses)
+
+        for item in emailAddresses:
+            self.mail(item, self.subject, self.message, self.attachment) 
     def subscribeUser(self):
+        self.sendInvites()
         #subscribe the user to the given calendar
         #get calendar from group calendar ID
-        groupCalendarID = "3emdggfncm6m9i0048t1rmmmls@group.calendar.google.com"
-        #groupCalendarID = self.getGroupCalendarID(self.groupName)
-        groupCalendar = gdata.calendar.data.CalendarEntry()
-            
-        calendarFeed = self.groupClient.GetOwnCalendarsFeed()
-        for calendar in calendarFeed.entry:
-            calendarID= CalAccessMethods.getCalendarID(calendar.id.text)
-            if  groupCalendarID == calendarID:
-                groupCalendar = calendar
         
+#         print("group calendar id")
+#         print(self.groupCalendarID)
+#         groupCalendar = gdata.calendar.data.CalendarEntry()
+#              
+#         calendarFeed = self.groupClient.GetOwnCalendarsFeed()
+#         for calendar in calendarFeed.entry:
+#             calendarID = CalAccessMethods.getCalendarID(calendar.id.text)
+#             print("calendar id")
+#             print(calendarID)
+#             if  self.groupCalendarID == calendarID:
+#                 print("Attempting to subscribe to calendar")
+#                 self.calendarClient.InsertCalendarSubscription(calendar)
+#                 print("Calendar subscription successfull!")        
         #subscribe user to calendar
-        print("Attempting to subscribe to calendar")
-        self.calendarClient.InsertCalendarSubscription(groupCalendar)
-        print("Calendar subscription successfull!")
+        
 #           print 'Subscribing to the calendar with ID: %s' % id
 #           calendar = gdata.calendar.data.CalendarEntry()
 #           calendar.id = atom.data.Id(text=id)
