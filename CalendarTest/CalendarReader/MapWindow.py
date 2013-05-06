@@ -2,8 +2,11 @@ import webbrowser
 from Tkinter import *
 from ttk import *
 import CalReader
+import pymaps
+from googlemaps import GoogleMaps
 
 class MapWindow(Toplevel):
+    #location=None
     def __init__(self, parent):
         Toplevel.__init__(self)
         self.parent = parent
@@ -25,7 +28,7 @@ class MapWindow(Toplevel):
         #start with StringVars
         self.locationString = StringVar()
         #labels
-        self.instructionLabel = Label(self, text="Enter the location where you would like to meet.", background="lightgray")
+        self.instructionLabel = Label(self, text="Enter the address of where you would like to meet.", background="lightgray")
         self.locationPrompt = Label(self, text="Location:", background="lightgray")
         #entry
         self.locationEntry = Entry(self, textvariable=self.locationString)
@@ -50,7 +53,8 @@ class MapWindow(Toplevel):
         if callerType == "Button":
             if callerName == "Map":
                 print("Map button pressed")
-                webbrowser.open('maps.html')
+                self.storeLocation()
+                self.createMap()
             elif callerName == "Next":
                 print("Next button pressed")
                 #pass the entered location and the passed times to the naming window
@@ -60,6 +64,21 @@ class MapWindow(Toplevel):
                 
     def storeLocation(self):
         self.location = self.locationString.get()
+
+    def createMap(self):  
+        gmaps = GoogleMaps("ABQIAAAAQQRAsOk3uqvy3Hwwo4CclBTrVPfEE8Ms0qPwyRfPn-DOTlpaLBTvTHRCdf2V6KbzW7PZFYLT8wFD0A")
+        address = self.location
+        lat, lng = gmaps.address_to_latlng(address)
+        m = pymaps.PyMap(lat, lng)
+        m.key = "ABQIAAAAQQRAsOk3uqvy3Hwwo4CclBTrVPfEE8Ms0qPwyRfPn-DOTlpaLBTvTHRCdf2V6KbzW7PZFYLT8wFD0A"
+        m.maps[0].zoom = 17
+        q = [lat,lng, 'Search Result Location'] 
+        m.maps[0].setpoint(q)
+        open('test.html','wb').write(m.showhtml())   # generate test file
+        webbrowser.open('test.html')
+
+
+
                          
 def main():
     
