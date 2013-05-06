@@ -1,15 +1,5 @@
 {
   "Users": [
-    {
-      "googleid": "projthee@gmail.com", 
-      "googlepass": "proj3pass", 
-      "grouplist": [
-        {
-          "groupname": "1"
-        }
-      ], 
-      "username": "a", 
-      "userpassword": "a"
-    }
+
   ]
 }
