@@ -16,11 +16,12 @@ import os
 import MapWindow
 
 class CalendarWindow(Toplevel):
-    def __init__(self, parent, client, calendarID):
+    def __init__(self, parent, client, calendarID, groupName):
             Toplevel.__init__(self)
             self.parent = parent
             self.groupClient = client
             self.calendarID = calendarID
+            self.groupName = groupName
             self.initUI()  
           
 #     def openGroupLogin(self, parent, client):
@@ -88,7 +89,7 @@ class CalendarWindow(Toplevel):
                 self.withdraw()  
     
     def openMapWindow(self):
-        mapWin = MapWindow.MapWindow(self.parent, self.groupClient, self.calendarID, self.eventStart, self.eventEnd)
+        mapWin = MapWindow.MapWindow(self.parent, self.groupClient, self.calendarID, self.eventStart, self.eventEnd, self.groupName)
 
     ValueError = exceptions.ValueError
     

@@ -13,7 +13,7 @@ import ConfirmEventWindow
 
 #create a window to allow the user to login to a given group a
 class EventNamingWindow(Toplevel): 
-    def __init__(self, parent, calendarID, calendarClient, location, eventStart, eventEnd):
+    def __init__(self, parent, calendarID, calendarClient, location, eventStart, eventEnd, groupName):
         Toplevel.__init__(self, parent)
         self.parent = parent
         self.windowWidth = parent.winfo_reqwidth()+parent.winfo_x()
@@ -23,6 +23,7 @@ class EventNamingWindow(Toplevel):
         self.eventEnd = eventEnd
         self.location = location
         self.calendarID = calendarID
+        self.groupName = groupName
         self.initUI()
         
     def initUI(self):
@@ -56,7 +57,7 @@ class EventNamingWindow(Toplevel):
                 print("Next clicked")
                 self.EventName = self.nameEntryString.get()
                 #hide the window, open a confirmation window, pass main program the event name
-                confirm = ConfirmEventWindow.ConfirmEventWindow(self.parent, self.calendarClient, self.calendarID, self.EventName, self.eventStart, self.eventEnd, self.location)
+                confirm = ConfirmEventWindow.ConfirmEventWindow(self.parent, self.calendarClient, self.calendarID, self.EventName, self.eventStart, self.eventEnd, self.location, self.groupName)
                 self.withdraw()
             elif callerName == "Back":
                 print("Back clicked")

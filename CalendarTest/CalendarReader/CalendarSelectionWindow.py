@@ -110,7 +110,7 @@ class CalendarSelectionWindow(Toplevel):
                 #subscribe the user to the group calendar
                 #self.subscribeUser()
                 #hide the window
-                calWin = CalendarWindow.CalendarWindow(self.parent, self.groupClient, self.groupCalendarID)
+                calWin = CalendarWindow.CalendarWindow(self.parent, self.groupClient, self.groupCalendarID, self.groupName)
                 self.withdraw()
        
     def seedCalendarList(self):
@@ -214,31 +214,31 @@ class CalendarSelectionWindow(Toplevel):
             print("No calendars have been selected. Select a calendar to add before moving on.")
         return
 
-        def mail(self, to, subject, text, attach):
-        gmail_user = "project3team07@gmail.com"
-        gmail_pwd = "teamseven"
-        msg = MIMEMultipart()
+    def mail(self, to, subject, text, attach):
+            gmail_user = "project3team07@gmail.com"
+            gmail_pwd = "teamseven"
+            msg = MIMEMultipart()
 
-        msg['From'] = gmail_user
-        msg['To'] = to
-        msg['Subject'] = subject
+            msg['From'] = gmail_user
+            msg['To'] = to
+            msg['Subject'] = subject
 
-        msg.attach(MIMEText(text))
+            msg.attach(MIMEText(text))
 
-        part = MIMEBase('application', 'octet-stream')
-        part.set_payload(open(attach, 'rb').read())
-        Encoders.encode_base64(part)
-        part.add_header('Content-Disposition',
-               'attachment; filename="%s"' % os.path.basename(attach))
-        msg.attach(part)
+            part = MIMEBase('application', 'octet-stream')
+            part.set_payload(open(attach, 'rb').read())
+            Encoders.encode_base64(part)
+            part.add_header('Content-Disposition',
+                            'attachment; filename="%s"' % os.path.basename(attach))
+            msg.attach(part)
 
-        mailServer = smtplib.SMTP("smtp.gmail.com", 587)
-        mailServer.ehlo()
-        mailServer.starttls()
-        mailServer.ehlo()
-        mailServer.login(gmail_user, gmail_pwd)
-        mailServer.sendmail(gmail_user, to, msg.as_string())
-        mailServer.close()
+            mailServer = smtplib.SMTP("smtp.gmail.com", 587)
+            mailServer.ehlo()
+            mailServer.starttls()
+            mailServer.ehlo()
+            mailServer.login(gmail_user, gmail_pwd)
+            mailServer.sendmail(gmail_user, to, msg.as_string())
+            mailServer.close()
 
     def sendInvites(self):
         rawEmailInfo = self.emailEntryString.get()
@@ -251,8 +251,7 @@ class CalendarSelectionWindow(Toplevel):
         self.sendInvites()
         #subscribe the user to the given calendar
         #get calendar from group calendar ID
-<<<<<<< HEAD
-=======
+
         #groupCalendarID = "3emdggfncm6m9i0048t1rmmmls@group.calendar.google.com"
         groupCalendarID = self.getGroupCalendarID(self.groupName)
         groupCalendar = gdata.calendar.data.CalendarEntry()
@@ -262,7 +261,7 @@ class CalendarSelectionWindow(Toplevel):
             calendarID = CalAccessMethods.getCalendarID(calendar.id.text)
             if  groupCalendarID == calendarID:
                 groupCalendar = calendar
->>>>>>> pushing
+
         
 #         print("group calendar id")
 #         print(self.groupCalendarID)

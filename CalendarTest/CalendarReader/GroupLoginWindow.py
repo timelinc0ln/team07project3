@@ -166,13 +166,14 @@ class GroupLoginWindow(Toplevel):
                             if self.userInGroup(groupName, self.userName) == True:
                                 #pass group information to CalendarWindow
                                 print("Existing user")
-                                calWindow = CalendarWindow.CalendarWindow(self.parent, self.calendarClient, groupName)
+                                calWindow = CalendarWindow.CalendarWindow(self.parent, self.calendarClient, self.getGroupCalendarID(groupName), groupName)
                                 #calWindow = CalendarSelectionWindow.CalendarSelectionWindow(self.parent, self.calendarClient, self.groupClient)
                                 self.withdraw()
                             else:
                                 #pass group information to CalendarSelectionWindow
                                 print("New user")
                                 self.updateUserJson(groupName, self.userName)
+                                self.updateGroupJson(groupName, self.userName)
                                 calWindow = CalendarSelectionWindow.CalendarSelectionWindow(self.parent, self.calendarClient, self.groupClient, groupName)
                                 self.withdraw()
                         else:
@@ -235,6 +236,12 @@ class GroupLoginWindow(Toplevel):
                 Users["grouplist"].append({"groupname":groupName})
         self.write_userData('UserDatabase.json')
 
+    def updateGroupJson(self, groupName, memberName):
+        for Group in self.groupData['Groups']:
+            if Group['groupName']==groupName:
+                Group["members"].append({"name":memberName})
+        self.write_groupData('GroupDatabase.json')
+        
     def userInGroup(self, groupName, userName):
         #determine whether userName is in group groupName
         for Groups in self.groupData['Groups']:

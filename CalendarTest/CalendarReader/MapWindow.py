@@ -8,13 +8,14 @@ import EventNamingWindow
 
 class MapWindow(Toplevel):
     #location=None
-    def __init__(self, parent, groupClient, calendarID, eventStart, eventEnd):
+    def __init__(self, parent, groupClient, calendarID, eventStart, eventEnd, groupName):
         Toplevel.__init__(self)
         self.parent = parent
         self.eventStart = eventStart
         self.eventEnd = eventEnd
         self.groupClient = groupClient
         self.calendarID = calendarID
+        self.groupName = groupName
         self.initUI()
     
     def initUI(self):
@@ -64,7 +65,7 @@ class MapWindow(Toplevel):
                 print("Next button pressed")
                 #pass the entered location and the passed times to the naming window
                 self.storeLocation()
-                naming = EventNamingWindow.EventNamingWindow(self.parent, self.calendarID, self.groupClient, self.location, self.eventStart, self.eventEnd)
+                naming = EventNamingWindow.EventNamingWindow(self.parent, self.calendarID, self.groupClient, self.location, self.eventStart, self.eventEnd, self.groupName)
                 self.withdraw()
                 #self.withdraw()
             elif callerName == "Back":

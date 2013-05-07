@@ -1,9 +1,21 @@
 {
   "Groups": [
-<<<<<<< HEAD
-
+    {
+      "calendarId": "4r4lfv0m8rb2urdjn1rpcggc10%40group.calendar.google.com", 
+      "dateCreated": "2013-05-06T19:02:22", 
+      "groupName": "Football Team", 
+      "members": [
+        {
+          "name": "BallerSteve"
+        }, 
+        {
+          "name": "PSteve"
+        }, 
+        {
+          "name": "projthee"
+        }
+      ], 
+      "password": "foot"
+    }
   ]
-=======
-      ]
->>>>>>> pushing
 }

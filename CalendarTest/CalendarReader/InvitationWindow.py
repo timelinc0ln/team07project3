@@ -29,7 +29,7 @@ class InvitationWindow(Toplevel):   # also need to pass in Group username/passwo
         self.groupClient = groupClient
         self.groupUsername = groupUsername # pass these in later
         self.groupPassword = password
-        self.attachment = "C:\Users\casey\Downloads\GroupMeet.png"
+#         self.attachment = "C:\Users\casey\Downloads\GroupMeet.png"
         self.subject = "GroupMeet Invitation"
         self.message = """Howdy!
 
@@ -86,7 +86,8 @@ class InvitationWindow(Toplevel):   # also need to pass in Group username/passwo
                 calWindow = CalendarSelectionWindow.CalendarSelectionWindow(self.parent, self.calendarClient, self.groupClient, self.groupUsername)
                 self.withdraw()
 
-    def mail(self, to, subject, text, attach):
+    #def mail(self, to, subject, text, attach):
+    def mail(self, to, subject, text):
         gmail_user = "project3team07@gmail.com"
         gmail_pwd = "teamseven"
         msg = MIMEMultipart()
@@ -96,13 +97,13 @@ class InvitationWindow(Toplevel):   # also need to pass in Group username/passwo
         msg['Subject'] = subject
 
         msg.attach(MIMEText(text))
-
-        part = MIMEBase('application', 'octet-stream')
-        part.set_payload(open(attach, 'rb').read())
-        Encoders.encode_base64(part)
-        part.add_header('Content-Disposition',
-               'attachment; filename="%s"' % os.path.basename(attach))
-        msg.attach(part)
+# 
+#         part = MIMEBase('application', 'octet-stream')
+#         part.set_payload(open(attach, 'rb').read())
+#         Encoders.encode_base64(part)
+#         part.add_header('Content-Disposition',
+#                'attachment; filename="%s"' % os.path.basename(attach))
+#         msg.attach(part)
 
         mailServer = smtplib.SMTP("smtp.gmail.com", 587)
         mailServer.ehlo()
@@ -118,7 +119,8 @@ class InvitationWindow(Toplevel):   # also need to pass in Group username/passwo
         #print (emailAddresses)
 
         for item in emailAddresses:
-            self.mail(item, self.subject, self.message, self.attachment)
+            #self.mail(item, self.subject, self.message, self.attachment)   
+            self.mail(item, self.subject, self.message)
     
 def main():
     

@@ -13,12 +13,18 @@ import EventNamingWindow
 import CalendarWindow
 import MapWindow
 import json
-
+import smtplib
+from email.MIMEBase import MIMEBase
+from email.MIMEText import MIMEText
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email import Encoders
+import os
 
 #create a window to allow the user to login to a given group a
 class ConfirmEventWindow(Toplevel):
     
-    def __init__(self, parent, calendarClient, calendarID, eventName, eventStart, eventEnd, eventPlace):
+    def __init__(self, parent, calendarClient, calendarID, eventName, eventStart, eventEnd, eventPlace, groupName):
         Toplevel.__init__(self, parent)
         self.parent = parent
         self.windowWidth = parent.winfo_reqwidth()+parent.winfo_x()
@@ -29,9 +35,26 @@ class ConfirmEventWindow(Toplevel):
         self.eventStart = eventStart
         self.eventEnd = eventEnd
         self.eventPlace = eventPlace
+        self.groupName = groupName
         self.readableEventStart = self.parseDate(self.eventStart)
         self.readableEventEnd = self.parseDate(self.eventEnd)
-#         print(self.readableEventDate)
+#         self.attachment = "C:\Users\casey\Downloads\GroupMeet.png"
+        self.subject = "GroupMeet: New Event Notification"
+        self.message = """Howdy!
+        This is an automatic notification provided by the GroupMeet service informing you that you have been invited to an event
+        by the following group:
+
+        GroupName: %s
+        Event: %s
+        Starting Time: %s
+        Ending Time: %s
+        Location: %s
+        
+        Please log in to the GroupMeet Service in order to view this event.
+
+        Thanks!
+
+        -GroupMeet Development Team""" % (self.groupName, self.eventName, self.eventStart, self.eventEnd, self.eventPlace)
         self.initUI()
         
     def initUI(self):
@@ -89,30 +112,33 @@ class ConfirmEventWindow(Toplevel):
                 print("Name clicked")
                 #hide the window, show the EventNamingWindow
                 name = EventNamingWindow.EventNamingWindow(self.parent, self.calendarID, 
-                    self.calendarClient, self.eventPlace, self.eventStart, self.eventEnd)
+                    self.calendarClient, self.eventPlace, self.eventStart, self.eventEnd, self.groupName)
                 self.withdraw()
             elif callerName == "Date":
                 print("Date clicked")
                 #hide the window, show the CalendarWindow
                 calWin = CalendarWindow.CalendarWindow(self.parent, self.calendarClient, 
-                    self.calendarID)
+                    self.calendarID, self.groupName)
                 self.withdraw()
             elif callerName == "Place":
                 print("Place clicked")
                 #hide the window, show the LocationWindow
                 mapwin = MapWindow.MapWindow(self.parent, self.calendarClient, self.calendarID, 
-                    self.eventStart, self.eventEnd) #sketchy
+                    self.eventStart, self.eventEnd, self.groupName) #sketchy
                 self.withdraw()
             elif callerName == "Add":
                 print("Add clicked")
                 #add event, hide the window, show mainMenu Window
                 self.makeEvent()
+                calWin = CalendarWindow.CalendarWindow(self.parent, self.calendarClient, 
+                    self.calendarID, self.groupName)
+                self.sendEmails()
                 self.withdraw()
             elif callerName == "Cancel":
                 print("Cancel clicked")
                 #hide the window, show mainMenu Window
                 calWin = CalendarWindow.CalendarWindow(self.parent, self.calendarClient, 
-                    self.calendarID)
+                    self.calendarID, self.groupName)
                 self.withdraw()
 
 
@@ -170,14 +196,14 @@ class ConfirmEventWindow(Toplevel):
                 self.calendarClient.InsertEvent(new_event=newEvent, insert_uri=self.calendarEventFeedUri)
         return
 
-    def membersOfGroup (self, groupName):
+    def emailAddressesOfGroup (self, groupName):
         emailAddresses=[]
         self.read_groupData('GroupDatabase.json')
         self.read_userData('UserDatabase.json')
         for Groups in self.groupData['Groups']:
             if Groups['groupName']==groupName:
                 for Users in self.userData['Users']:
-                    emailAddresses.push(Users['googleid'])
+                    emailAddresses.append(Users['googleid'])
                 return emailAddresses
             
     def read_groupData(self, filename):
@@ -189,19 +215,55 @@ class ConfirmEventWindow(Toplevel):
         json_data=open(filename)
         userData=json.load(json_data)
         self.userData=userData
+        
+    #def mail(self, to, subject, text, attach):
+    def mail(self, to, subject, text):
+            gmail_user = "project3team07@gmail.com"
+            gmail_pwd = "teamseven"
+            msg = MIMEMultipart()
+
+            msg['From'] = gmail_user
+            msg['To'] = to
+            msg['Subject'] = subject
+
+            msg.attach(MIMEText(text))
+
+#             part = MIMEBase('application', 'octet-stream')
+#             part.set_payload(open(attach, 'rb').read())
+#             Encoders.encode_base64(part)
+#             part.add_header('Content-Disposition',
+#                             'attachment; filename="%s"' % os.path.basename(attach))
+#             msg.attach(part)
+
+            mailServer = smtplib.SMTP("smtp.gmail.com", 587)
+            mailServer.ehlo()
+            mailServer.starttls()
+            mailServer.ehlo()
+            mailServer.login(gmail_user, gmail_pwd)
+            mailServer.sendmail(gmail_user, to, msg.as_string())
+            mailServer.close()
+
+    def sendEmails(self):
+        emailAddresses = self.emailAddressesOfGroup(self.groupName)
+        #print (emailAddresses)
+
+        for item in emailAddresses:
+            #self.mail(item, self.subject, self.message, self.attachment)   
+            self.mail(item, self.subject, self.message)         
+
 def main():
     
     root = Tk()
     root.geometry("600x155+300+300")
     #print(root.geometry.)
-    calendarID = "n3e76680gcabna20da1gaktg34%40group.calendar.google.com"
+    calendarID = "4r4lfv0m8rb2urdjn1rpcggc10%40group.calendar.google.com"
     client = gdata.calendar.client.CalendarClient()
-    client.ClientLogin("project3team07", "teamseven", "CalReader")
-    eventName = "Basketball"
-    eventStart = "2013-08-09T10:57:00+02:00"
-    eventEnd = "2013-08-09T11:57:00+02:00"
-    eventPlace = "Space"
-    app = ConfirmEventWindow(root, client, calendarID, eventName, eventStart, eventEnd, eventPlace)
+    client.ClientLogin("project3team07", "teamseven", "GroupMeet")
+    eventName = "Football at night"
+    eventStart = "2013-08-09T20:57:00+02:00"
+    eventEnd = "2013-08-09T23:57:00+02:00"
+    eventPlace = "Bee Creek Park"
+    app = ConfirmEventWindow(root, client, calendarID, eventName, eventStart, eventEnd, eventPlace, "Football Team")
     root.mainloop()
     
 if __name__ == '__main__':

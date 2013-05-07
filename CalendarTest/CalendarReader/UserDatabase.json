@@ -1,9 +1,40 @@
 {
   "Users": [
-
-<<<<<<< HEAD
+    {
+      "googleid": "ILoveBasketballTooMuch@gmail.com", 
+      "googlepass": "wordtopass1", 
+      "grouplist": [
+        {
+          "groupname": "Football Team"
+        }
+      ], 
+      "username": "BallerSteve", 
+      "userpassword": "hoop"
+    }, 
+    {
+      "googleid": "projthee@gmail.com", 
+      "googlepass": "proj3pass", 
+      "grouplist": [
+        {
+          "groupname": "Football Team"
+        }, 
+        {
+          "groupname": "Football Team"
+        }
+      ], 
+      "username": "projthee", 
+      "userpassword": "pass"
+    }, 
+    {
+      "googleid": "PeasantSteve@gmail.com", 
+      "googlepass": "wordtopass1", 
+      "grouplist": [
+        {
+          "groupname": "Football Team"
+        }
+      ], 
+      "username": "PSteve", 
+      "userpassword": "freelabor"
+    }
   ]
-=======
-      ]
->>>>>>> pushing
 }
