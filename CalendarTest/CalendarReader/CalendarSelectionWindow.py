@@ -64,25 +64,26 @@ class CalendarSelectionWindow(Toplevel):
         self.deselectCalendarButton = Button(self, text="<<", command=lambda: self.callBack("Button", "Deselect"))
         self.nextButton = Button(self, text="Next", command=lambda: self.callBack("Button", "Next"))
         #labels
-        self.calendarSelectionMessage = Label(self, textvariable=self.calendarSelectionExplanation)
-        self.userCalendarHeader = Label(self, text= "User Calendars")
-        self.selectedCalendarHeader = Label(self, text= "Selected Calendars")
+        self.calendarSelectionMessage = Label(self, textvariable=self.calendarSelectionExplanation, background="lightgray")       
+        self.userCalendarHeader = Label(self, text= "User Calendars", background="lightgray")
+        self.selectedCalendarHeader = Label(self, text= "Selected Calendars", background="lightgray")
         
         #design window
         self.parent.title("Select Calendars to Sync")
         self.style = Style()
         self.style.theme_use("default")
+        self.configure(background="lightgray")
         #self.pack(fill=BOTH, expand = 1)
         
-        self.calendarSelectionMessage.grid(row=0, column=0, columnspan=8)
+        self.calendarSelectionMessage.grid(row=0, column=0, columnspan=8, padx=5, pady=5)
         self.calendarSelectionExplanation.set("Select which of your calendars you want to add to the group calendar below.")
-        self.userCalendarHeader.grid(row=1,column=1, sticky=S)
-        self.selectedCalendarHeader.grid(row=1, column=3, sticky=S)
-        self.userCalendars.grid(row=2,column=1, rowspan=4, sticky=E)
-        self.selectedCalendars.grid(row=2, column=3, rowspan=4, sticky=W)
-        self.selectCalendarButton.grid(row=3, column=2)
-        self.deselectCalendarButton.grid(row=4, column=2)
-        self.nextButton.grid(row=5, column=4)
+        self.userCalendarHeader.grid(row=1,column=1,padx=5, pady=5, sticky=S)
+        self.selectedCalendarHeader.grid(row=1, column=3, padx=5, pady=5, sticky=S)
+        self.userCalendars.grid(row=2,column=1, rowspan=4, padx=5, pady=5, sticky=E)
+        self.selectedCalendars.grid(row=2, column=3, rowspan=4, padx=5, pady=5, sticky=W)
+        self.selectCalendarButton.grid(row=3, column=2, padx=5, pady=5)
+        self.deselectCalendarButton.grid(row=4, column=2,padx=5, pady=5)
+        self.nextButton.grid(row=6, column=3,padx=5, pady=5, sticky=E+W)
         
         #fill the userCalendar box
         self.seedCalendarList()
